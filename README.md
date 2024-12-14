@@ -1,6 +1,6 @@
 # Wraeclast Whisperer
 
-An AI-powered assistant for Path of Exile 2 that helps players optimize their gaming experience.
+A GPT-powered agent for Path of Exile 2 with up-to-date game data that helps players synergize their builds, create loot filters, answer game-related questions, and more.
 
 ## Description
 
