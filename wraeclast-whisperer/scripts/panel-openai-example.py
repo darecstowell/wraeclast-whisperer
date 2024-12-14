@@ -56,8 +56,6 @@ template = pn.template.FastListTemplate(
 template.servable()
 
 # Serve the panel app
-pn.config.loading_spinner = "petal"
-pn.config.loading_color = "black"
 pn.serve(
     template,
     port=5007,
