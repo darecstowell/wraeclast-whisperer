@@ -1,0 +1,52 @@
+# Byte-compiled / optimized / DLL files
+**/__pycache__/*
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+**/.ipynb_checkpoints
+
+# Environments
+**/.env
+**/.venv
+**/env/
+**/venv/
+**/ENV/
+**/env.bak/
+**/venv.bak/
+
+# IntelliJ
+out/
+.idea/
+.run/
+
+# VSCode
+.vscode/
+
+# Devcontainers
+.devcontainer/
+
+# Git
+.git/
+.github/
+.gitignore
+.pre-commit-config.yaml
+
+# Ploomber output
+**/products/*
+**/reports/*
+
+# Setup tools
+**/*.egg-info/*
+**/poetry.lock
+
+# Docker
+**/Dockerfile
+**/.dockerignore
+**/docker-compose.yml
+
+# MacOS
+**/.DS_Store
+
+# Logs
+**/*.log

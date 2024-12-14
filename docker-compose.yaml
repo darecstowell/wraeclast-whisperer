@@ -1,0 +1,9 @@
+services:
+  ww:
+    hostname: ww
+    build: ./
+    env_file:
+      - path: .env
+    volumes:
+      - ./:/usr/src/app/
+    command: sleep infinity  # Keep container running

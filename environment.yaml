@@ -1,0 +1,8 @@
+name: base
+channels:
+  - conda-forge
+dependencies:
+  - binutils
+  - gcc
+  - poetry
+  - python=3.12

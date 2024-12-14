@@ -1,0 +1,28 @@
+{
+    "name": "wraeclast-whisperer",
+    "dockerComposeFile": "../docker-compose.yaml",
+    "service": "ww",
+    "postCreateCommand": "",
+    "workspaceFolder": "/usr/src/app",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "/opt/conda/bin/python"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-python.mypy-type-checker",
+                "VisualStudioExptTeam.vscodeintellicode",
+                "charliermarsh.ruff",
+                "aaron-bond.better-comments",
+                "vscode-icons-team.vscode-icons",
+                "streetsidesoftware.code-spell-checker",
+                "tamasfe.even-better-toml",
+                "yzhang.markdown-all-in-one",
+                "mechatroner.rainbow-csv",
+                "redhat.vscode-yaml",
+                "samuelcolvin.jinjahtml"
+            ]
+        }
+    }
+}
