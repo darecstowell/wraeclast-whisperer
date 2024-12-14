@@ -38,8 +38,10 @@ docker compose up -d
 ```
 
 **Using Devcontainer in VSCode (fastest method)** 
-Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
-Use command -- "Dev Containers: Rebuild Container" 
+
+- Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+- Use command -- "Dev Containers: Rebuild Container" 
+
 
 ## Configuration
 
