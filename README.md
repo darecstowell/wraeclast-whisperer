@@ -37,6 +37,10 @@ poetry install
 docker compose up -d
 ```
 
+**Using Devcontainer in VSCode (fastest method)** 
+Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+Use command -- "Dev Containers: Rebuild Container" 
+
 ## Configuration
 
 Set your OpenAI API key in the .env file:
