@@ -1,0 +1,12 @@
+Website for downloading game .dat files:
+https://snosme.github.io/poe-dat-viewer/
+DAT Schema:
+https://poe-bundles.snos.workers.dev/schema.min.json
+Patch Root Bundle:
+https://poe-bundles.snos.workers.dev/4.1.0.10.2/Bundles2/_.index.bin
+Typescript loading schema example: 
+https://github.com/SnosMe/poe-dat-viewer/blob/master/viewer/src/app/dat-viewer/db.ts
+
+^^ These probably are not what i'm looking for. The bundles are update files. They do not contain all the data needed to supply the agent.
+Most likely, will need to download PoE2 on windows and access the .ggpk file. Then use a utility like PyPoe https://github.com/OmegaK2/PyPoE
+to scrape the game data. Could then setup a cron to check if the file is changed and trigger the data scrapping pipeline. 
