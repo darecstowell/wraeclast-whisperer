@@ -16,6 +16,15 @@ import panel as pn
 client = openai.AsyncOpenAI()
 
 
+def create_thread():
+    """
+    Create a new thread.
+    """
+    # !Avoid global variables in production code
+    global thread
+    thread = asyncio.run(client.beta.threads.create())
+
+
 async def create_assistant(name: str, model: str, instructions: str, tools: list = []):
     """
     Create a new assistant or retrieve an existing one with the same data.
@@ -72,7 +81,7 @@ def setup_assistant():
     """
     Setup the assistant with the desired data and tools for this example.
     """
-
+    # !Avoid global variables in production code
     global assistant
     assistant = asyncio.run(
         create_assistant(
@@ -125,9 +134,6 @@ async def assistant_callback(message: str):
     """
 
     try:
-        # Create a new thread
-        thread = await client.beta.threads.create()
-
         # Add the user's message to the thread
         await client.beta.threads.messages.create(
             thread_id=thread.id,
@@ -198,6 +204,7 @@ if __name__ == "__main__":
     # Set up the chat interface and serve the panel app
     pn.extension()
     pn.state.execute(setup_assistant)
+    pn.state.execute(create_thread)
     chat_interface = pn.chat.ChatInterface(
         callback=assistant_callback,
         callback_user="PanelExample",
