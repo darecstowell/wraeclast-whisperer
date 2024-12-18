@@ -1,4 +1,6 @@
 import asyncio
+import hashlib
+import json
 
 import openai
 import panel as pn
@@ -9,18 +11,44 @@ pn.extension()
 client = openai.AsyncOpenAI()
 
 
-# Create the assistant
-async def create_assistant():
-    return await client.beta.assistants.create(
-        name="PanelExample",
-        instructions="You are a helpful assistant named PanelExample.",
-        model="gpt-4o-2024-11-20",
+async def create_assistant(name: str, model: str, instructions: str):
+    # List available assistants
+    assistants = await client.beta.assistants.list()
+
+    # Serialize the desired assistant data
+    desired_assistant_data = {
+        "name": name,
+        "model": model,
+        "instructions": instructions,
+    }
+    desired_serialized = json.dumps(desired_assistant_data, sort_keys=True).encode()
+    desired_hash = hashlib.sha256(desired_serialized).hexdigest()
+
+    for assistant in assistants.data:
+        # Serialize existing assistant data
+        existing_assistant_data = {
+            "name": assistant.name,
+            "model": assistant.model,
+            "instructions": assistant.instructions,
+        }
+        existing_serialized = json.dumps(existing_assistant_data, sort_keys=True).encode()
+        existing_hash = hashlib.sha256(existing_serialized).hexdigest()
+
+        if existing_hash == desired_hash:
+            return assistant
+
+    # If assistant does not exist, create a new one
+    new_assistant = await client.beta.assistants.create(
+        name=name,
+        model=model,
+        instructions=instructions,
     )
+    return new_assistant
 
 
 def setup_assistant():
     global assistant
-    assistant = asyncio.run(create_assistant())
+    assistant = asyncio.run(create_assistant("PanelExample", "gpt-4o-mini", "You are an example assistant."))
 
 
 pn.state.execute(setup_assistant)
