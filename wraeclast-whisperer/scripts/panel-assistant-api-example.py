@@ -1,3 +1,11 @@
+"""
+Panel Assistant API Example Script
+
+This script integrates OpenAI's assistant with a Panel-based web interface, allowing users to interact
+with a custom assistant through a chat interface. It demonstrates creating or retrieving an assistant,
+defining custom tools, and handling asynchronous API interactions.
+"""
+
 import asyncio
 import hashlib
 import json
