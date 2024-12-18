@@ -5,7 +5,7 @@ services:
     env_file:
       - path: .env
     ports:
-      - "5007:5007"
+      - "127.0.0.1:5007:5007"
     volumes:
       - ./:/usr/src/app/
     command: sleep infinity  # Keep container running

@@ -219,6 +219,7 @@ if __name__ == "__main__":
     pn.serve(
         template,
         port=5007,
-        websocket_origin=["localhost:5007", "0.0.0.0:5007"],
+        host="0.0.0.0",
+        websocket_origin=["localhost:5007", "127.0.0.1:5007"],
         show=True,
     )

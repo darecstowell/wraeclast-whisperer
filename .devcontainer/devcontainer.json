@@ -21,7 +21,8 @@
                 "yzhang.markdown-all-in-one",
                 "mechatroner.rainbow-csv",
                 "redhat.vscode-yaml",
-                "samuelcolvin.jinjahtml"
+                "samuelcolvin.jinjahtml",
+                "GitHub.copilot"
             ]
         }
     }
