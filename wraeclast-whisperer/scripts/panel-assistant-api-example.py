@@ -5,9 +5,6 @@ import json
 import openai
 import panel as pn
 
-pn.extension()
-
-# Initialize OpenAI API client
 client = openai.AsyncOpenAI()
 
 
@@ -15,6 +12,7 @@ async def create_assistant(name: str, model: str, instructions: str, tools: list
     """
     Create a new assistant or retrieve an existing one with the same data.
     """
+
     # List available assistants
     assistants = await client.beta.assistants.list()
 
@@ -63,6 +61,10 @@ async def create_assistant(name: str, model: str, instructions: str, tools: list
 
 
 def setup_assistant():
+    """
+    Setup the assistant with the desired data and tools for this example.
+    """
+
     global assistant
     assistant = asyncio.run(
         create_assistant(
@@ -91,20 +93,29 @@ def setup_assistant():
     )
 
 
-pn.state.execute(setup_assistant)
-
-
 async def hello_world():
+    """
+    Returns a greeting message.
+    """
+
     print("Called hello_world")
     return "hello world"
 
 
 async def get_current_temperature():
+    """
+    Returns the current temperature
+    """
+
     print("Called get_current_temperature")
     return "The current temperature is 72°F."
 
 
 async def assistant_callback(message: str):
+    """
+    Callback function to interact with the assistant.
+    """
+
     try:
         # Create a new thread
         thread = await client.beta.threads.create()
@@ -175,24 +186,24 @@ async def assistant_callback(message: str):
         return "An unexpected error occurred."
 
 
-chat_interface = pn.chat.ChatInterface(
-    callback=assistant_callback,
-    callback_user="PanelExample",
-    help_text="Send a message to interact with the PanelExample assistant!",
-)
-
-template = pn.template.FastListTemplate(
-    title="OpenAI Assistant - PanelExample",
-    header_background="#212121",
-    main=[chat_interface],
-)
-
-template.servable()
-
-# Serve the Panel app
-pn.serve(
-    template,
-    port=5007,
-    websocket_origin=["localhost:5007", "0.0.0.0:5007"],
-    show=True,
-)
+if __name__ == "__main__":
+    # Set up the chat interface and serve the panel app
+    pn.extension()
+    pn.state.execute(setup_assistant)
+    chat_interface = pn.chat.ChatInterface(
+        callback=assistant_callback,
+        callback_user="PanelExample",
+        help_text="Send a message to interact with the PanelExample assistant!",
+    )
+    template = pn.template.FastListTemplate(
+        title="OpenAI Assistant - PanelExample",
+        header_background="#212121",
+        main=[chat_interface],
+    )
+    template.servable()
+    pn.serve(
+        template,
+        port=5007,
+        websocket_origin=["localhost:5007", "0.0.0.0:5007"],
+        show=True,
+    )
