@@ -4,6 +4,7 @@ from helpers import AssistantManager, render_template
 from tools import get_tools
 
 
+# TODO: move this to scripts?
 async def main():
     # Define assistant parameters
     name = "Wraeclast Whisperer"
