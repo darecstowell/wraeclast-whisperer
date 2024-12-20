@@ -1,7 +1,7 @@
 import asyncio
 
-from helpers import AssistantManager, render_template
-from tools import get_tools
+from wraeclast_whisperer.helpers import AssistantManager, render_template
+from wraeclast_whisperer.tools import get_tools
 
 
 # TODO: move this to scripts?
@@ -29,4 +29,8 @@ async def main():
 
 
 if __name__ == "__main__":
+    import sys
+
+    print(sys.path)
+
     asyncio.run(main())

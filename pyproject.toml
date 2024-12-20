@@ -9,6 +9,10 @@ description = "An Agentic Path of Exile Assistant"
 authors = ["darecstowell"]
 readme = "README.md"
 
+packages = [
+    { include = "wraeclast_whisperer", from = "src" },
+]
+
 [tool.poetry.dependencies]
 python = "^3.12"
 # jinja2 = "*"
