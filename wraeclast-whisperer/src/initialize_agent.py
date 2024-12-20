@@ -23,7 +23,9 @@ async def main():
     # Setup the assistant
     assistant = await assistant_manager.setup_assistant()
 
-    # load panel app
+    # TODO: add thread manager
+
+    # TODO: load panel app
 
 
 if __name__ == "__main__":
