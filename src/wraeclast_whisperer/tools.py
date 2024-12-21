@@ -31,3 +31,21 @@ def get_tools():
             },
         },
     ]
+
+
+async def hello_world():
+    """
+    Returns a greeting message.
+    """
+
+    print("Called hello_world")
+    return "hello world"
+
+
+async def get_current_temperature():
+    """
+    Returns the current temperature
+    """
+
+    print("Called get_current_temperature")
+    return "The current temperature is 72°F."

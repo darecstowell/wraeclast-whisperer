@@ -1103,13 +1103,13 @@ typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
 name = "pymediawiki"
-version = "0.7.4"
+version = "0.7.5"
 description = "Wikipedia and MediaWiki API wrapper for Python"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "pymediawiki-0.7.4-py3-none-any.whl", hash = "sha256:23e95d8a6d3170414f6db4c8d1592c1458a7a2ad20dceb9d8541e5e19752fd95"},
-    {file = "pymediawiki-0.7.4.tar.gz", hash = "sha256:fec43acf5d88e599708dde62dfc9107a4e322470d1c46eecd442af61d723e7c6"},
+    {file = "pymediawiki-0.7.5-py3-none-any.whl", hash = "sha256:78642bd95c470246ed48598958a1eb30c5c51245f5767f4cad1bf4dcfde75511"},
+    {file = "pymediawiki-0.7.5.tar.gz", hash = "sha256:6d17c1bf9750110c2dc2203f82cdda209f3e84ed32443356942f3eb5c8a0ec25"},
 ]
 
 [package.dependencies]
@@ -1129,6 +1129,20 @@ files = [
 
 [package.dependencies]
 six = ">=1.5"
+
+[[package]]
+name = "python-dotenv"
+version = "1.0.1"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "python-dotenv-1.0.1.tar.gz", hash = "sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca"},
+    {file = "python_dotenv-1.0.1-py3-none-any.whl", hash = "sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a"},
+]
+
+[package.extras]
+cli = ["click (>=5.0)"]
 
 [[package]]
 name = "pytz"
@@ -1395,4 +1409,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "f5fc69c8be57b7211b84922fd6887c9665bdd1c85f3a56f79a8df7de8f2b7f17"
+content-hash = "1234547da3a77bf810f61d77fa88f7fbe141702d9e5094fce0db762a76e9d0d1"
