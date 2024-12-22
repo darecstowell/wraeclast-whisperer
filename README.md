@@ -24,7 +24,7 @@ Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API th
 ## Installation
 
 1. Clone the repository
-2. Copy `.env.example` to `.env` and add your OpenAI API key
+2. Copy `app/.env.example` to `app/.env` and add your OpenAI API key
 3. Choose your preferred installation method:
 
 **Using Poetry:**
@@ -42,19 +42,11 @@ docker compose up -d
 - Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 - Use command -- "Dev Containers: Rebuild Container" 
 
-
-## Configuration
-
-Set your OpenAI API key in the .env file:
-
-```env
-OPENAI_API_KEY=your-api-key-here
-```
-
 ## Development
 
 This project uses:
 
+- Chainlit as an LLM framework with UI
 - Poetry for dependency management
 - Black for code formatting
 - Ruff for linting
