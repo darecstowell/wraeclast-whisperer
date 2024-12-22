@@ -3,7 +3,7 @@ services:
     hostname: ww
     build: ./
     env_file:
-      - path: .env
+      - path: app/.env
     ports:
       - "127.0.0.1:5007:5007"
     volumes:
