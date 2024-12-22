@@ -54,10 +54,10 @@ edit_message = true
 
 [UI]
 # Name of the assistant.
-name = "Assistant"
+name = "Wræclast Whisperer"
 
 # Description of the assistant. This is used for HTML tags.
-# description = ""
+description = "Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API that provides personalized guidance for Path of Exile 2 players."
 
 # Large size content are by default collapsed for a cleaner ui
 default_collapse_content = true
@@ -66,7 +66,7 @@ default_collapse_content = true
 cot = "full"
 
 # Link to your github repo. This will add a github button in the UI's header.
-# github = ""
+github = "https://github.com/darecstowell/wraeclast-whisperer"
 
 # Specify a CSS file that can be used to customize the user interface.
 # The CSS file can be served from the public directory or via an external link.
