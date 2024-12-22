@@ -89,7 +89,7 @@ github = "https://github.com/darecstowell/wraeclast-whisperer"
 
 [UI.theme]
     default = "dark"
-    #layout = "wide"
+    layout = "wide"
     #font_family = "Inter, sans-serif"
 # Override default MUI light theme. (Check theme.ts)
 [UI.theme.light]
@@ -110,7 +110,7 @@ github = "https://github.com/darecstowell/wraeclast-whisperer"
     #paper = "#FFFFFF"
 
     [UI.theme.dark.primary]
-        #main = "#F80061"
+        main = "#641209"
         #dark = "#980039"
         #light = "#FFE7EB"
     [UI.theme.dark.text]
