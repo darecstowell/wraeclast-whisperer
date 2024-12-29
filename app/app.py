@@ -8,13 +8,14 @@ from chainlit.element import Element
 from helpers.events import EventHandler
 from openai import AsyncOpenAI, OpenAI
 from openai.types.beta.threads.runs import RunStep
+from tools.wiki_search import Poe2WikiTool
 
 async_openai_client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 sync_openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-assistant = sync_openai_client.beta.assistants.retrieve(os.environ.get("OPENAI_ASSISTANT_ID"))
+assistant = sync_openai_client.beta.assistants.retrieve(os.environ["OPENAI_ASSISTANT_ID"])
 
-config.ui.name = assistant.name
+config.ui.name = assistant.name or "Wraeclast Whisperer"
 
 
 @cl.step(type="tool")
@@ -86,6 +87,36 @@ async def stop_chat():
         await async_openai_client.beta.threads.runs.cancel(
             thread_id=current_run_step.thread_id, run_id=current_run_step.run_id
         )
+
+
+@cl.step(type="tool")
+async def call_tool(tool_call_id, name, arguments, message_history):
+    current_step = cl.context.current_step
+    if current_step:
+        current_step.name = name
+        current_step.input = arguments
+
+        if name == "wiki_search":
+            function_response = Poe2WikiTool().run(**arguments)  # type: ignore
+
+        # function_response = get_current_weather(
+        #     location=arguments.get("location"),
+        #     unit=arguments.get("unit"),
+        # )
+
+        current_step.output = function_response
+        current_step.language = "json"
+
+        message_history.append(
+            {
+                "role": "function",
+                "name": name,
+                "content": function_response,
+                "tool_call_id": tool_call_id,
+            }
+        )
+    else:
+        raise Exception("No current step found")
 
 
 @cl.on_message

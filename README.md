@@ -58,4 +58,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-Path of Exile 2 and all related content are property of Grinding Gear Games. Go Support them!
+- Path of Exile 2 and all related content are property of Grinding Gear Games. Go Support them!
+- Chainlit
