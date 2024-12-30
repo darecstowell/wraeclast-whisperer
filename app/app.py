@@ -53,6 +53,7 @@ async def process_files(files: List[Element]):
 @cl.set_starters
 async def set_starters():
     return [
+        # TODO: have the message pick at random from a list of questions
         cl.Starter(
             label="Ask a general POE2 question",
             message="How many trial parts do you have to get through to get the level 60 ascendancy points?",
