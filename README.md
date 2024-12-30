@@ -42,6 +42,22 @@ docker compose up -d
 - Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 - Use command -- "Dev Containers: Rebuild Container" 
 
+## Usage
+Open app directory
+```sh
+cd app;
+```
+
+Create an OpenAI assistant
+```sh
+python create_assistant.py;
+```
+
+Run the Chainlit app
+```sh
+chainlit run app.py --no-cache -w;
+```
+
 ## Development
 
 This project uses:
