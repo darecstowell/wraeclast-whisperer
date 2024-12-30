@@ -1,10 +1,14 @@
 import json
+import os
 
 import chainlit as cl
 from literalai.helper import utc_now
 from openai import AsyncAssistantEventHandler, AsyncOpenAI
 from openai.types.beta.threads.runs import RunStep
 from tools.wiki_search import Poe2WikiTool
+
+# TODO: share this with app.py
+async_openai_client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
 class EventHandler(AsyncAssistantEventHandler):
@@ -54,12 +58,11 @@ class EventHandler(AsyncAssistantEventHandler):
         self.current_tool_call = tool_call.id
         if hasattr(tool_call, "function"):
             if tool_call.function.name == "wiki_search":
+                # TODO: abstract this ^^
                 friendly_name = Poe2WikiTool().friendly_name
                 self.current_step = cl.Step(name=friendly_name, type="tool", parent_id=cl.context.current_run.id)
-                # TODO: abstract this ^^ then
         else:
             self.current_step = cl.Step(name=tool_call.type, type="tool", parent_id=cl.context.current_run.id)
-        self.current_step.show_input = "python"
         self.current_step.start = utc_now()
         await self.current_step.send()
 
@@ -76,7 +79,6 @@ class EventHandler(AsyncAssistantEventHandler):
             await self.current_step.send()
 
         if delta.type == "function":
-            # no need to stream function arguments
             pass
 
         if delta.type == "code_interpreter":
@@ -95,6 +97,11 @@ class EventHandler(AsyncAssistantEventHandler):
                     await self.current_step.stream_token(delta.code_interpreter.input, is_input=True)
 
     async def on_event(self, event) -> None:
+        # Retrieve events that are denoted with 'requires_action'
+        # since these will have our tool_calls
+        if event.event == "thread.run.requires_action":
+            run_id = event.data.id  # Retrieve the run ID from the event data
+            await self.handle_requires_action(event.data, run_id)
         if event.event == "error":
             return cl.ErrorMessage(content=str(event.data.message)).send()
 
@@ -102,27 +109,45 @@ class EventHandler(AsyncAssistantEventHandler):
         return cl.ErrorMessage(content=str(exception)).send()
 
     async def on_tool_call_done(self, tool_call):
-        """
-        This function is called when the tool call is finished streaming.
-        Here you are able to collect the full arguments.
-        """
-        if hasattr(tool_call, "function"):
-            if tool_call.function.name == "wiki_search":
-                args = tool_call.function.arguments
+        self.current_step.end = utc_now()
+        await self.current_step.update()
+
+    async def handle_requires_action(self, data, run_id):
+        tool_outputs = []
+
+        for tool in data.required_action.submit_tool_outputs.tool_calls:
+            if tool.function.name == "wiki_search":
+                args = tool.function.arguments
                 if isinstance(args, str):
                     args = json.loads(args or "{}")
                 try:
                     function_response = Poe2WikiTool().run(**args)
+                    self.current_step.show_input = "json"
+                    self.current_step.input = args
                     self.current_step.output = function_response
                     self.current_step.language = "json"
+                    tool_outputs.append({"tool_call_id": tool.id, "output": str(function_response)})
                 except Exception as e:
                     function_response = str(e)
                     await cl.ErrorMessage(content=str(e)).send()
                     self.current_step.is_error = True
-        # TODO: abstract this ^^ then
-        # TODO: render tool output and pass start a new message with the tool output
-        self.current_step.end = utc_now()
-        await self.current_step.update()
+                    tool_outputs.append({"tool_call_id": tool.id, "output": f"Error: {str(e)}"})
+
+        # Submit all tool_outputs at the same time
+        await self.submit_tool_outputs(tool_outputs, run_id)
+
+    async def submit_tool_outputs(self, tool_outputs, run_id):
+        # Use the submit_tool_outputs_stream helper
+        async with async_openai_client.beta.threads.runs.submit_tool_outputs_stream(
+            thread_id=self.current_run.thread_id,
+            run_id=self.current_run.id,
+            tool_outputs=tool_outputs,
+            event_handler=EventHandler(
+                assistant_name=self.assistant_name,
+                async_openai_client=self.async_openai_client,
+            ),
+        ) as stream:
+            await stream.until_done()
 
     async def on_image_file_done(self, image_file):
         image_id = image_file.file_id

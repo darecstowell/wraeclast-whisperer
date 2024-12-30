@@ -9,8 +9,6 @@ from helpers.events import EventHandler
 from openai import AsyncOpenAI, OpenAI
 from openai.types.beta.threads.runs import RunStep
 
-# load_dotenv()
-
 async_openai_client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 sync_openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
