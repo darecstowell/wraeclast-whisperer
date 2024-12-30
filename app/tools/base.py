@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 class AssistantTool(BaseModel, ABC):
     name: str
+    friendly_name: str = ""
     description: str = ""
     strict: bool = True
     parameters: Type[pydantic.BaseModel]

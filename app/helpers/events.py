@@ -1,7 +1,10 @@
+import json
+
 import chainlit as cl
 from literalai.helper import utc_now
 from openai import AsyncAssistantEventHandler, AsyncOpenAI
 from openai.types.beta.threads.runs import RunStep
+from tools.wiki_search import Poe2WikiTool
 
 
 class EventHandler(AsyncAssistantEventHandler):
@@ -26,7 +29,6 @@ class EventHandler(AsyncAssistantEventHandler):
     async def on_text_done(self, text):
         await self.current_message.update()
         if text.annotations:
-            print(text.annotations)
             for annotation in text.annotations:
                 if annotation.type == "file_path":
                     response = await self.async_openai_client.files.with_raw_response.content(
@@ -50,7 +52,13 @@ class EventHandler(AsyncAssistantEventHandler):
 
     async def on_tool_call_created(self, tool_call):
         self.current_tool_call = tool_call.id
-        self.current_step = cl.Step(name=tool_call.type, type="tool", parent_id=cl.context.current_run.id)
+        if hasattr(tool_call, "function"):
+            if tool_call.function.name == "wiki_search":
+                friendly_name = Poe2WikiTool().friendly_name
+                self.current_step = cl.Step(name=friendly_name, type="tool", parent_id=cl.context.current_run.id)
+                # TODO: abstract this ^^ then
+        else:
+            self.current_step = cl.Step(name=tool_call.type, type="tool", parent_id=cl.context.current_run.id)
         self.current_step.show_input = "python"
         self.current_step.start = utc_now()
         await self.current_step.send()
@@ -68,6 +76,7 @@ class EventHandler(AsyncAssistantEventHandler):
             await self.current_step.send()
 
         if delta.type == "function":
+            # no need to stream function arguments
             pass
 
         if delta.type == "code_interpreter":
@@ -93,6 +102,25 @@ class EventHandler(AsyncAssistantEventHandler):
         return cl.ErrorMessage(content=str(exception)).send()
 
     async def on_tool_call_done(self, tool_call):
+        """
+        This function is called when the tool call is finished streaming.
+        Here you are able to collect the full arguments.
+        """
+        if hasattr(tool_call, "function"):
+            if tool_call.function.name == "wiki_search":
+                args = tool_call.function.arguments
+                if isinstance(args, str):
+                    args = json.loads(args or "{}")
+                try:
+                    function_response = Poe2WikiTool().run(**args)
+                    self.current_step.output = function_response
+                    self.current_step.language = "json"
+                except Exception as e:
+                    function_response = str(e)
+                    await cl.ErrorMessage(content=str(e)).send()
+                    self.current_step.is_error = True
+        # TODO: abstract this ^^ then
+        # TODO: render tool output and pass start a new message with the tool output
         self.current_step.end = utc_now()
         await self.current_step.update()
 

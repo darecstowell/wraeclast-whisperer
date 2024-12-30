@@ -15,9 +15,12 @@ class Poe2WikiToolParams(BaseModel):
 
 class Poe2WikiTool(AssistantTool):
     name: str = "wiki_search"
+    friendly_name: str = "PoE2 Wiki Search"
     description: str = "Searches the PoE2 wiki"
     parameters = Poe2WikiToolParams
 
     def run(self, **kwargs):
         search_term = kwargs.get("query", "")
+        if not search_term:
+            raise ValueError("Query parameter is required")
         return poe2wiki.search(search_term)
