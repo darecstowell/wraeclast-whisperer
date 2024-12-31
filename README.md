@@ -8,12 +8,12 @@ Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API th
 
 ## Features (Planned)
 
-- General game knowledge assistance
-- Build optimization suggestions
-- Gear improvement recommendations  
-- Skill gem synergy analysis
-- Custom loot filter generation
-- Real-time build assessment
+- [x] General game knowledge assistance
+- [ ] Build optimization suggestions
+- [ ] Gear improvement recommendations  
+- [ ] Skill gem synergy analysis
+- [ ] Custom loot filter generation
+- [ ] Real-time build assessment
 
 ## Prerequisites
 
