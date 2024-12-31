@@ -57,6 +57,9 @@ Run the Chainlit app
 ```sh
 chainlit run app.py --no-cache -w;
 ```
+## Screenshots
+
+![alt text](screenshots/lvl3_support_gems.png)
 
 ## Development
 
