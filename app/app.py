@@ -53,7 +53,7 @@ async def set_starters():
     return [
         # TODO: have the message pick at random from a list of questions
         cl.Starter(
-            label="Ask a general POE2 question",
+            label="Ask a general Path of Exile 2 question",
             message="How many trial parts do you have to get through to get the level 60 ascendancy points?",
             icon="/public/write.svg",
         ),
