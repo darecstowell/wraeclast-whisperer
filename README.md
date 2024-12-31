@@ -2,6 +2,8 @@
 
 A GPT-powered agent for Path of Exile 2 with up-to-date game data that helps players synergize their builds, create loot filters, answer game-related questions, and more.
 
+![alt text](screenshots/lvl3_support_gems.png)
+
 ## Description
 
 Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API that provides personalized guidance for Path of Exile 2 players. It analyzes current game data and player statistics to offer insights and recommendations. This agent is not intended to create builds for you, but rather aid you on your journey. 
@@ -57,9 +59,6 @@ Run the Chainlit app
 ```sh
 chainlit run app.py --no-cache -w;
 ```
-## Screenshots
-
-![alt text](screenshots/lvl3_support_gems.png)
 
 ## Development
 
