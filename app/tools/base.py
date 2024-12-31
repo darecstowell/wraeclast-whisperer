@@ -2,7 +2,14 @@ from abc import ABC, abstractmethod
 from typing import Any, Type
 
 import pydantic
+from mediawiki import MediaWiki
 from pydantic import BaseModel
+
+# TODO: Move these to a config file
+poe2wiki = MediaWiki(
+    url="https://www.poe2wiki.net/api.php",
+    user_agent="wraeclast-whisperer/0.0.1 (https://github.com/darecstowell) python-pymediawiki/0.7.4",
+)
 
 
 class AssistantTool(BaseModel, ABC):

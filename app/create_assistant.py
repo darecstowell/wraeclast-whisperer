@@ -4,7 +4,7 @@ import re
 from dotenv import load_dotenv
 from helpers import _render
 from openai import OpenAI
-from tools import wiki_search
+from tools import wiki_page, wiki_search
 
 
 def _update_env_file(assistant_id: str) -> None:
@@ -27,11 +27,11 @@ load_dotenv()
 
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 instructions = _render.render_template("agent_instructions.jinja2")
-wiki_tool = wiki_search.Poe2WikiTool()  # type: ignore
 tools = [
     {"type": "code_interpreter"},
     {"type": "file_search"},
-    {"type": "function", "function": wiki_tool.function_schema},
+    {"type": "function", "function": wiki_search.WikiSearch().function_schema},
+    {"type": "function", "function": wiki_page.WikiPage().function_schema},
 ]
 # TODO: is file_search needed?
 # TODO: magic string

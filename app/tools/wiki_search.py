@@ -1,26 +1,21 @@
-from mediawiki import MediaWiki
+from helpers import _render
 from pydantic import BaseModel
 
-from .base import AssistantTool
-
-poe2wiki = MediaWiki(
-    url="https://www.poe2wiki.net/api.php",
-    user_agent="wraeclast-whisperer/0.0.1 (https://github.com/darecstowell) python-pymediawiki/0.7.4",
-)
+from .base import AssistantTool, poe2wiki
 
 
-class Poe2WikiToolParams(BaseModel):
+class WikiSearchParams(BaseModel):
     query: str
 
 
-class Poe2WikiTool(AssistantTool):
+class WikiSearch(AssistantTool):
     name: str = "wiki_search"
     friendly_name: str = "PoE2 Wiki Search"
-    description: str = "Searches the PoE2 wiki"
-    parameters = Poe2WikiToolParams
+    description: str = _render.render_template("wiki_search_description.jinja2")
+    parameters = WikiSearchParams
 
     def run(self, **kwargs):
         search_term = kwargs.get("query", "")
         if not search_term:
             raise ValueError("Query parameter is required")
-        return poe2wiki.search(search_term)
+        return poe2wiki.search(query=search_term, results=5, suggestion=True)

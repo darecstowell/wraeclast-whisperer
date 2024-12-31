@@ -5,7 +5,7 @@ import chainlit as cl
 from literalai.helper import utc_now
 from openai import AsyncAssistantEventHandler, AsyncOpenAI
 from openai.types.beta.threads.runs import RunStep
-from tools.wiki_search import Poe2WikiTool
+from tools import wiki_page, wiki_search
 
 # TODO: share this with app.py
 async_openai_client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -58,9 +58,10 @@ class EventHandler(AsyncAssistantEventHandler):
         self.current_tool_call = tool_call.id
         if hasattr(tool_call, "function"):
             if tool_call.function.name == "wiki_search":
-                # TODO: abstract this ^^
-                friendly_name = Poe2WikiTool().friendly_name
-                self.current_step = cl.Step(name=friendly_name, type="tool", parent_id=cl.context.current_run.id)
+                friendly_name = wiki_search.WikiSearch().friendly_name
+            elif tool_call.function.name == "wiki_page":
+                friendly_name = wiki_page.WikiPage().friendly_name
+            self.current_step = cl.Step(name=friendly_name, type="tool", parent_id=cl.context.current_run.id)
         else:
             self.current_step = cl.Step(name=tool_call.type, type="tool", parent_id=cl.context.current_run.id)
         self.current_step.start = utc_now()
@@ -116,12 +117,15 @@ class EventHandler(AsyncAssistantEventHandler):
         tool_outputs = []
 
         for tool in data.required_action.submit_tool_outputs.tool_calls:
-            if tool.function.name == "wiki_search":
+            if tool.function.name == "wiki_search" or tool.function.name == "wiki_page":
                 args = tool.function.arguments
                 if isinstance(args, str):
                     args = json.loads(args or "{}")
                 try:
-                    function_response = Poe2WikiTool().run(**args)
+                    if tool.function.name == "wiki_search":
+                        function_response = wiki_search.WikiSearch().run(**args)
+                    elif tool.function.name == "wiki_page":
+                        function_response = wiki_page.WikiPage().run(**args)
                     self.current_step.show_input = "json"
                     self.current_step.input = args
                     self.current_step.output = function_response
