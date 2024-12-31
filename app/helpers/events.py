@@ -125,11 +125,12 @@ class EventHandler(AsyncAssistantEventHandler):
                     if tool.function.name == "wiki_search":
                         function_response = wiki_search.WikiSearch().run(**args)
                     elif tool.function.name == "wiki_page":
+                        self.current_step.name = f"Wiki Page: {args.get('page_name')}"
                         function_response = wiki_page.WikiPage().run(**args)
                     self.current_step.show_input = "json"
                     self.current_step.input = args
                     self.current_step.output = function_response
-                    self.current_step.language = "json"
+                    self.current_step.language = "markdown"
                     tool_outputs.append({"tool_call_id": tool.id, "output": str(function_response)})
                 except Exception as e:
                     function_response = str(e)
