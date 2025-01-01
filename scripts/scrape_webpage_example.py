@@ -118,8 +118,11 @@ def fetch_sitemap_links(sitemap_url: str) -> list:
 # Allowed URL
 allowed_url = "https://maxroll.gg/poe2/build-guides/lightning-arrow-deadeye"
 robots_txt = get_robots_txt(allowed_url)
-print(robots_txt)
 print(f"Is Build Guide URL allowed: {is_url_allowed(allowed_url, robots_txt)}")
+
+# Crawl Delay
+print("Crawl delay for Maxroll:", get_crawl_delay(robots_txt))
+print()
 
 # Disallowed URL
 disallowed_url = "https://maxroll.gg/d4/planner/8niw00kp"
@@ -135,8 +138,8 @@ print()
 # Site Map Links
 sitemaps = get_sitemap_links(robots_txt)
 all_links = []
-for sitemap in sitemaps:
-    all_links.extend(fetch_sitemap_links(sitemap))
+for mobalytics_sitemap in sitemaps:
+    all_links.extend(fetch_sitemap_links(mobalytics_sitemap))
 
 print("All links from Maxroll sitemap:", all_links)
 print()
@@ -144,6 +147,29 @@ print()
 print("All links from Maxroll Poe2 sitemap:")
 poe2_sitemap = "https://maxroll.gg/poe2/sitemap.xml"
 print(fetch_sitemap_links(poe2_sitemap))
+print()
 
+# Mobalytics
+mobalytics_url = "https://mobalytics.gg/poe-2"
+mobalytics_robots = get_robots_txt(mobalytics_url)
+print(f"Is Mobalytics URL allowed: {is_url_allowed(mobalytics_url, mobalytics_robots)}")
+
+# Crawl Delay
+print("Crawl delay for Mobalytics:", get_crawl_delay(mobalytics_robots))
+print()
+
+# Sitemap Links
+mobalytics_sitemaps = get_sitemap_links(mobalytics_robots)
+print("Mobalytics sitemap link:", mobalytics_sitemaps)
+print()
+
+# Site Map Links
+mobalytics_sitemaps = get_sitemap_links(mobalytics_robots)
+all_links = []
+for mobalytics_sitemap in mobalytics_sitemaps:
+    all_links.extend(fetch_sitemap_links(mobalytics_sitemap))
+
+print("All links from Mobalytics sitemap:", all_links)
+print()
 
 # TODO: use beautifulsoup to scrape a webpage
