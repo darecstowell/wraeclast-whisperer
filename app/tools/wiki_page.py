@@ -1,3 +1,4 @@
+import pydantic
 from helpers import render
 from pydantic import BaseModel
 
@@ -7,7 +8,7 @@ from .base import poe2wiki
 
 
 class WikiPageParams(BaseModel):
-    page_name: str
+    page_name: str = pydantic.Field(..., description="")
 
 
 class WikiPage(AssistantTool):

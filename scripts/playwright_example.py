@@ -23,5 +23,4 @@ def get_readable_content(url: str) -> str:
         return content
 
 
-# print(get_readable_content("https://maxroll.gg/poe2/build-guides/lightning-arrow-deadeye"))
-print(get_readable_content("https://mobalytics.gg/poe-2/builds/sanctum-attribute-stacker"))
+print(get_readable_content("https://maxroll.gg/poe2/build-guides/lightning-arrow-deadeye"))

@@ -54,14 +54,22 @@ class EventHandler(AsyncAssistantEventHandler):
                     #     await self.current_message.update()
 
     async def on_tool_call_created(self, tool_call):
-        from app.tools import wiki_page, wiki_search
+        from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
 
+        wiki_search_instance = wiki_search.WikiSearch()
+        wiki_page_instance = wiki_page.WikiPage()
+        fetch_sitemap_instance = fetch_sitemap.FetchSitemap()
+        load_page_content_instance = load_page_content.LoadPageContent()
         self.current_tool_call = tool_call.id
         if hasattr(tool_call, "function"):
-            if tool_call.function.name == "wiki_search":
+            if tool_call.function.name == wiki_search_instance.name:
                 friendly_name = wiki_search.WikiSearch().friendly_name
-            elif tool_call.function.name == "wiki_page":
+            elif tool_call.function.name == wiki_page_instance.name:
                 friendly_name = wiki_page.WikiPage().friendly_name
+            elif tool_call.function.name == fetch_sitemap_instance.name:
+                friendly_name = fetch_sitemap.FetchSitemap().friendly_name
+            elif tool_call.function.name == load_page_content_instance.name:
+                friendly_name = load_page_content.LoadPageContent().friendly_name
             self.current_step = cl.Step(name=friendly_name, type="tool", parent_id=cl.context.current_run.id)
         else:
             self.current_step = cl.Step(name=tool_call.type, type="tool", parent_id=cl.context.current_run.id)
@@ -117,21 +125,31 @@ class EventHandler(AsyncAssistantEventHandler):
         await self.current_step.update()
 
     async def handle_requires_action(self, data, run_id):
-        from app.tools import wiki_page, wiki_search
+        from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
 
+        wiki_search_instance = wiki_search.WikiSearch()
+        wiki_page_instance = wiki_page.WikiPage()
+        fetch_sitemap_instance = fetch_sitemap.FetchSitemap()
+        load_page_content_instance = load_page_content.LoadPageContent()
         tool_outputs = []
 
         for tool in data.required_action.submit_tool_outputs.tool_calls:
-            if tool.function.name == "wiki_search" or tool.function.name == "wiki_page":
+            if hasattr(tool, "function"):
                 args = tool.function.arguments
                 if isinstance(args, str):
                     args = json.loads(args or "{}")
                 try:
-                    if tool.function.name == "wiki_search":
-                        function_response = wiki_search.WikiSearch().run(**args)
-                    elif tool.function.name == "wiki_page":
+                    if tool.function.name == wiki_search_instance.name:
+                        function_response = wiki_search_instance.run(**args)
+                    elif tool.function.name == wiki_page_instance.name:
                         self.current_step.name = f"Wiki Page: {args.get('page_name')}"
-                        function_response = wiki_page.WikiPage().run(**args)
+                        function_response = wiki_page_instance.run(**args)
+                    elif tool.function.name == fetch_sitemap_instance.name:
+                        self.current_step.name = f"Fetched Sitemap for: {args.get('url')}"
+                        function_response = fetch_sitemap_instance.run(**args)
+                    elif tool.function.name == load_page_content_instance.name:
+                        self.current_step.name = f"Load Page Content for: {args.get('url')}"
+                        function_response = await load_page_content_instance.run(**args)
                     self.current_step.show_input = "json"
                     self.current_step.input = args
                     self.current_step.output = function_response

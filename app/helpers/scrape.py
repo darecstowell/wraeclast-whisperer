@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 from xml.etree import ElementTree
 
 import requests
-from playwright.sync_api import sync_playwright
+from playwright.async_api import async_playwright
 
 # TODO: get from settings
 _user_agent = "wraeclast-whisperer/0.0.1 (https://github.com/darecstowell) python-pymediawiki/0.7.4"
@@ -119,23 +119,24 @@ def fetch_sitemap_links(sitemap_url: str) -> list:
     return []
 
 
-def get_readable_content(url: str) -> str:
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        page.goto(url)
+async def get_readable_content(url: str) -> str:
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        await page.goto(url)
         # Remove unwanted elements
-        page.evaluate("""
+        await page.evaluate("""
             for (const tag of document.querySelectorAll('script, style, nav, header, footer, ads')) {
                 tag.remove();
             }
         """)
         # Try to find the main content
         article_selector = "article, main, .content"
-        main_content = page.query_selector(article_selector)
+        main_content = await page.query_selector(article_selector)
         if not main_content:
-            browser.close()
+            await browser.close()
             return ""
-        content = page.evaluate("(main_content) => main_content.innerText", main_content)
-        browser.close()
+        content = await page.evaluate("(main_content) => main_content.innerText", main_content)
+        await browser.close()
+        print(f"Content : {content}")
         return content

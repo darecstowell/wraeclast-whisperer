@@ -1,3 +1,4 @@
+import pydantic
 from helpers import render
 from pydantic import BaseModel
 
@@ -5,7 +6,7 @@ from .base import AssistantTool, poe2wiki
 
 
 class WikiSearchParams(BaseModel):
-    query: str
+    query: str = pydantic.Field(..., description="")
 
 
 class WikiSearch(AssistantTool):
