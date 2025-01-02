@@ -15,4 +15,6 @@ ENV TZ=America/Chicago
 RUN playwright install-deps \
     && playwright install
 
+ENV PYTHONPATH=/usr/src/app
+
 COPY . .

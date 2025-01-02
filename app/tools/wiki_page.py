@@ -1,7 +1,9 @@
-from app.helpers import render
+from helpers import render
 from pydantic import BaseModel
 
-from .base import AssistantTool, poe2wiki
+from app.tools.base import AssistantTool
+
+from .base import poe2wiki
 
 
 class WikiPageParams(BaseModel):

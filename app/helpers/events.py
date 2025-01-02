@@ -5,7 +5,6 @@ import chainlit as cl
 from literalai.helper import utc_now
 from openai import AsyncAssistantEventHandler, AsyncOpenAI
 from openai.types.beta.threads.runs import RunStep
-from tools import wiki_page, wiki_search
 
 # TODO: share this with app.py
 async_openai_client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -55,6 +54,8 @@ class EventHandler(AsyncAssistantEventHandler):
                     #     await self.current_message.update()
 
     async def on_tool_call_created(self, tool_call):
+        from app.tools import wiki_page, wiki_search
+
         self.current_tool_call = tool_call.id
         if hasattr(tool_call, "function"):
             if tool_call.function.name == "wiki_search":
@@ -104,9 +105,11 @@ class EventHandler(AsyncAssistantEventHandler):
             run_id = event.data.id  # Retrieve the run ID from the event data
             await self.handle_requires_action(event.data, run_id)
         if event.event == "error":
+            print(event.data.message)
             return cl.ErrorMessage(content=str(event.data.message)).send()
 
     async def on_exception(self, exception: Exception) -> None:
+        print(exception)
         return cl.ErrorMessage(content=str(exception)).send()
 
     async def on_tool_call_done(self, tool_call):
@@ -114,6 +117,8 @@ class EventHandler(AsyncAssistantEventHandler):
         await self.current_step.update()
 
     async def handle_requires_action(self, data, run_id):
+        from app.tools import wiki_page, wiki_search
+
         tool_outputs = []
 
         for tool in data.required_action.submit_tool_outputs.tool_calls:
@@ -135,6 +140,7 @@ class EventHandler(AsyncAssistantEventHandler):
                 except Exception as e:
                     function_response = str(e)
                     await cl.ErrorMessage(content=str(e)).send()
+                    print(f"Error: {str(e)}")
                     self.current_step.is_error = True
                     tool_outputs.append({"tool_call_id": tool.id, "output": f"Error: {str(e)}"})
 

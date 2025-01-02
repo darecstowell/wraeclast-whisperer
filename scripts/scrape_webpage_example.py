@@ -93,7 +93,7 @@ def get_crawl_delay(robots_txt: str, user_agent: str = "*") -> float:
     return general_delay
 
 
-def get_sitemap_links(robots_txt: str) -> list:
+def get_sitemap_links_from_robots_txt(robots_txt: str) -> list:
     """
     Extract all sitemap URLs from the robots.txt content.
     """
@@ -174,7 +174,7 @@ print(f"Is D4 Planner URL allowed: {is_url_allowed(maxroll_disallowed_url, maxro
 print()
 
 # Site Map Links
-maxroll_sitemaps = get_sitemap_links(maxroll_robots_txt)
+maxroll_sitemaps = get_sitemap_links_from_robots_txt(maxroll_robots_txt)
 maxroll_all_links = []
 for mobalytics_sitemap in maxroll_sitemaps:
     maxroll_all_links.extend(fetch_sitemap_links(mobalytics_sitemap))
@@ -219,12 +219,12 @@ print("Crawl delay for Mobalytics:", get_crawl_delay(mobalytics_robots_txt))
 print()
 
 # Sitemap Links
-mobalytics_sitemaps = get_sitemap_links(mobalytics_robots_txt)
+mobalytics_sitemaps = get_sitemap_links_from_robots_txt(mobalytics_robots_txt)
 print("Mobalytics sitemap link:", mobalytics_sitemaps)
 print()
 
 # Site Map Links
-mobalytics_sitemaps = get_sitemap_links(mobalytics_robots_txt)
+mobalytics_sitemaps = get_sitemap_links_from_robots_txt(mobalytics_robots_txt)
 mobalytics_all_links = []
 for mobalytics_sitemap in mobalytics_sitemaps:
     mobalytics_all_links.extend(fetch_sitemap_links(mobalytics_sitemap))
