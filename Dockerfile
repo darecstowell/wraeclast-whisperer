@@ -10,4 +10,9 @@ RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction \
     && poetry cache clear pypi --all
 
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Chicago
+RUN playwright install-deps \
+    && playwright install
+
 COPY . .

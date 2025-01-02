@@ -2,9 +2,9 @@ import os
 import re
 
 from dotenv import load_dotenv
-from helpers import _render
+from app.helpers import render
 from openai import OpenAI
-from tools import wiki_page, wiki_search
+from tools import wiki_search
 
 
 def _update_env_file(assistant_id: str) -> None:
@@ -26,14 +26,15 @@ def _update_env_file(assistant_id: str) -> None:
 load_dotenv()
 
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-instructions = _render.render_template("agent_instructions.jinja2")
+instructions = render.render_template("agent_instructions.jinja2")
+wiki_tool = wiki_search.Poe2WikiTool()  # type: ignore
+print(wiki_tool.function_schema)
 tools = [
     {"type": "code_interpreter"},
     {"type": "file_search"},
-    {"type": "function", "function": wiki_search.WikiSearch().function_schema},
-    {"type": "function", "function": wiki_page.WikiPage().function_schema},
+    {"type": "function", "function": wiki_tool.function_schema},
 ]
-# TODO: is file_search needed?
+# TODO: is this file needed?
 # TODO: magic string
 file = openai_client.files.create(file=open("../data/all-wiki-pages-12-20-2024.txt", "rb"), purpose="assistants")
 assistant = openai_client.beta.assistants.create(
@@ -42,6 +43,7 @@ assistant = openai_client.beta.assistants.create(
     instructions=instructions,
     temperature=0.1,
     tools=tools,
+    # tool_resources={"code_interpreter": {"file_ids": [file.id]}},
 )
 
 _update_env_file(assistant.id)

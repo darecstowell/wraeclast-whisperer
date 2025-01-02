@@ -1,4 +1,4 @@
-from helpers import _render
+from app.helpers import render
 from pydantic import BaseModel
 
 from .base import AssistantTool, poe2wiki
@@ -11,7 +11,7 @@ class WikiSearchParams(BaseModel):
 class WikiSearch(AssistantTool):
     name: str = "wiki_search"
     friendly_name: str = "PoE2 Wiki Search"
-    description: str = _render.render_template("wiki_search_description.jinja2")
+    description: str = render.render_template("wiki_search_description.jinja2")
     parameters = WikiSearchParams
 
     def run(self, **kwargs):

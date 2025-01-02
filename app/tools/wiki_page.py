@@ -1,4 +1,4 @@
-from helpers import _render
+from app.helpers import render
 from pydantic import BaseModel
 
 from .base import AssistantTool, poe2wiki
@@ -11,7 +11,7 @@ class WikiPageParams(BaseModel):
 class WikiPage(AssistantTool):
     name: str = "wiki_page"
     friendly_name: str = "PoE2 Wiki Load Page"
-    description: str = _render.render_template("wiki_page_description.jinja2")
+    description: str = render.render_template("wiki_page_description.jinja2")
     parameters = WikiPageParams
 
     def run(self, **kwargs):

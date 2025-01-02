@@ -2,6 +2,12 @@ from urllib.parse import urlparse
 from xml.etree import ElementTree
 
 import requests
+from bs4 import BeautifulSoup
+
+# region Functions
+
+
+_user_agent = "wraeclast-whisperer/0.0.1 (https://github.com/darecstowell) python-pymediawiki/0.7.4"
 
 
 def get_robots_txt(url: str) -> str:
@@ -9,7 +15,7 @@ def get_robots_txt(url: str) -> str:
     base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/robots.txt"
     print(f"Fetching robots.txt from: {base_url}")
     try:
-        response = requests.get(base_url, timeout=5)
+        response = requests.get(base_url, headers={"User-Agent": _user_agent}, timeout=5)
         if response.ok:
             return response.text
     except requests.RequestException:
@@ -106,7 +112,7 @@ def fetch_sitemap_links(sitemap_url: str) -> list:
     Fetch and parse the sitemap XML to extract all URLs.
     """
     try:
-        response = requests.get(sitemap_url, timeout=5)
+        response = requests.get(sitemap_url, headers={"User-Agent": _user_agent}, timeout=5)
         if response.ok:
             tree = ElementTree.fromstring(response.content)
             return [elem.text for elem in tree.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}loc")]
@@ -115,33 +121,65 @@ def fetch_sitemap_links(sitemap_url: str) -> list:
     return []
 
 
+def get_readable_content(url: str) -> str:
+    """Extract clean readable content from webpage with headers"""
+    try:
+        response = requests.get(url, headers={"User-Agent": _user_agent}, timeout=5)
+        if not response.ok:
+            return ""
+
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # Remove unwanted elements
+        for tag in soup(["script", "style", "nav", "header", "footer", "ads"]):
+            tag.decompose()
+
+        # Find main content
+        article = soup.find("article") or soup.find("main") or soup.find(class_="content")
+        if not article:
+            return ""
+
+        # Get unique content parts
+        content_set = set()
+        for element in article.find_all(["h1", "h2", "h3", "h4", "h5", "h6", "p", "li"]):
+            text = element.get_text().strip()
+            if text:
+                if element.name.startswith("h"):
+                    content_set.add(f"\n{text}\n")
+                else:
+                    content_set.add(text)
+
+        return "\n".join(sorted(content_set))
+
+    except requests.RequestException:
+        return ""
+
+
+# endregion
+
+# region Maxroll
+
 # Allowed URL
-allowed_url = "https://maxroll.gg/poe2/build-guides/lightning-arrow-deadeye"
-robots_txt = get_robots_txt(allowed_url)
-print(f"Is Build Guide URL allowed: {is_url_allowed(allowed_url, robots_txt)}")
+maxroll_allowed_url = "https://maxroll.gg/poe2/build-guides/lightning-arrow-deadeye"
+maxroll_robots_txt = get_robots_txt(maxroll_allowed_url)
+print(f"Is Build Guide URL allowed: {is_url_allowed(maxroll_allowed_url, maxroll_robots_txt)}")
 
 # Crawl Delay
-print("Crawl delay for Maxroll:", get_crawl_delay(robots_txt))
+print("Crawl delay for Maxroll:", get_crawl_delay(maxroll_robots_txt))
 print()
 
 # Disallowed URL
-disallowed_url = "https://maxroll.gg/d4/planner/8niw00kp"
-print(f"Is D4 Planner URL allowed: {is_url_allowed(disallowed_url, robots_txt)}")
-print()
-
-# Unreachable Robots.txt
-fextralife_url = "https://fextralife.com/path-of-exile-2-monk-starter-guide-how-to-build-a-monk/"
-unable_to_load_robots_txt = get_robots_txt(fextralife_url)
-print(f"Is Fextralife URL allowed: {is_url_allowed(fextralife_url, unable_to_load_robots_txt)}")
+maxroll_disallowed_url = "https://maxroll.gg/d4/planner/8niw00kp"
+print(f"Is D4 Planner URL allowed: {is_url_allowed(maxroll_disallowed_url, maxroll_robots_txt)}")
 print()
 
 # Site Map Links
-sitemaps = get_sitemap_links(robots_txt)
-all_links = []
-for mobalytics_sitemap in sitemaps:
-    all_links.extend(fetch_sitemap_links(mobalytics_sitemap))
+maxroll_sitemaps = get_sitemap_links(maxroll_robots_txt)
+maxroll_all_links = []
+for mobalytics_sitemap in maxroll_sitemaps:
+    maxroll_all_links.extend(fetch_sitemap_links(mobalytics_sitemap))
 
-print("All links from Maxroll sitemap:", all_links)
+print("All links from Maxroll sitemap:", maxroll_all_links)
 print()
 
 print("All links from Maxroll Poe2 sitemap:")
@@ -149,27 +187,55 @@ poe2_sitemap = "https://maxroll.gg/poe2/sitemap.xml"
 print(fetch_sitemap_links(poe2_sitemap))
 print()
 
+# Readable Content
+print("Readable content from Maxroll Build Guide:")
+print(get_readable_content(maxroll_allowed_url))
+print()
+
+print("Readable content from Maxroll Meta Page:")
+print(get_readable_content("https://maxroll.gg/poe2/meta/the-build-meta"))
+print()
+# endregion
+
+# region Fextralife
+
+# Unreachable Robots.txt
+fextralife_url = "https://fextralife.com/path-of-exile-2-monk-starter-guide-how-to-build-a-monk/"
+unable_to_load_robots_txt = get_robots_txt(fextralife_url)
+print(f"Is Fextralife URL allowed: {is_url_allowed(fextralife_url, unable_to_load_robots_txt)}")
+print()
+
+# endregion
+
+# region Mobalytics
+
 # Mobalytics
 mobalytics_url = "https://mobalytics.gg/poe-2"
-mobalytics_robots = get_robots_txt(mobalytics_url)
-print(f"Is Mobalytics URL allowed: {is_url_allowed(mobalytics_url, mobalytics_robots)}")
+mobalytics_robots_txt = get_robots_txt(mobalytics_url)
+print(f"Is Mobalytics URL allowed: {is_url_allowed(mobalytics_url, mobalytics_robots_txt)}")
 
 # Crawl Delay
-print("Crawl delay for Mobalytics:", get_crawl_delay(mobalytics_robots))
+print("Crawl delay for Mobalytics:", get_crawl_delay(mobalytics_robots_txt))
 print()
 
 # Sitemap Links
-mobalytics_sitemaps = get_sitemap_links(mobalytics_robots)
+mobalytics_sitemaps = get_sitemap_links(mobalytics_robots_txt)
 print("Mobalytics sitemap link:", mobalytics_sitemaps)
 print()
 
 # Site Map Links
-mobalytics_sitemaps = get_sitemap_links(mobalytics_robots)
-all_links = []
+mobalytics_sitemaps = get_sitemap_links(mobalytics_robots_txt)
+mobalytics_all_links = []
 for mobalytics_sitemap in mobalytics_sitemaps:
-    all_links.extend(fetch_sitemap_links(mobalytics_sitemap))
+    mobalytics_all_links.extend(fetch_sitemap_links(mobalytics_sitemap))
 
-print("All links from Mobalytics sitemap:", all_links)
+print("All links from Mobalytics sitemap:", mobalytics_all_links)
 print()
 
-# TODO: use beautifulsoup to scrape a webpage
+# Readable Content
+print("Readable content from Mobalytics:")
+print(get_readable_content("https://mobalytics.gg/poe-2/builds/sanctum-attribute-stacker"))
+print()
+
+
+# endregion
