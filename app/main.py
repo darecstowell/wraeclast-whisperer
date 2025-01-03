@@ -5,15 +5,31 @@ from typing import List
 import chainlit as cl
 from chainlit.config import config
 from chainlit.element import Element
-from helpers.events import EventHandler
 from openai import AsyncOpenAI, OpenAI
 from openai.types.beta.threads.runs import RunStep
+
+from app.helpers.assistant import create_assistant
+from app.helpers.events import EventHandler
+from app.helpers.render import render_template
+from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
 
 async_openai_client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 sync_openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-# TODO: hash assistant instead
-assistant = sync_openai_client.beta.assistants.retrieve(os.environ.get("OPENAI_ASSISTANT_ID"))
+assistant = create_assistant(
+    client=sync_openai_client,
+    name="Wraeclast Whisperer",
+    model="gpt-4o",
+    instructions=render_template("agent_instructions.jinja2"),
+    tools=[
+        {"type": "code_interpreter"},
+        {"type": "file_search"},
+        {"type": "function", "function": wiki_search.WikiSearch().function_schema},
+        {"type": "function", "function": wiki_page.WikiPage().function_schema},
+        {"type": "function", "function": fetch_sitemap.FetchSitemap().function_schema},
+        {"type": "function", "function": load_page_content.LoadPageContent().function_schema},
+    ],
+)
 config.ui.name = assistant.name or "Wraeclast Whisperer"
 
 

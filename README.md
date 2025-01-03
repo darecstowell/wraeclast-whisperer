@@ -11,7 +11,7 @@ Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API th
 ## Features (Planned)
 
 - [x] General game knowledge assistance
-- [ ] Build optimization suggestions
+- [x] Build optimization suggestions
 - [ ] Gear improvement recommendations  
 - [ ] Skill gem synergy analysis
 - [ ] Custom loot filter generation
@@ -19,48 +19,39 @@ Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API th
 
 ## Prerequisites
 
-- Python 3.12+
-- OpenAI API key
-- Docker (optional, but highly encouraged)
+- [OpenAI API key](https://platform.openai.com/settings/organization/api-keys)
+- [Docker](https://www.docker.com/products/docker-desktop/)
 
-## Installation
+## Developer Installation
 
 1. Clone the repository
 2. Copy `app/.env.example` to `app/.env` and add your OpenAI API key
 3. Choose your preferred installation method:
 
-**Using Poetry:**
+**Using Docker**
+- Install and run [Docker](https://www.docker.com/products/docker-desktop/), then -
 ```sh
-poetry install
+docker compose up -d;
+docker exec ww bash;
 ```
 
-**Using Docker** 
-```sh
-docker compose up -d
-```
-
-**Using Devcontainer in VSCode (fastest method)** 
-
+**[Using Devcontainer in VSCode](https://code.visualstudio.com/docs/devcontainers/tutorial) (slightly advanced, but fastest method)** 
+- Must have [Docker](https://www.docker.com/products/docker-desktop/) installed. 
 - Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
-- Use command -- "Dev Containers: Rebuild Container" 
+- Use vscode command -- "Dev Containers: Rebuild Container" 
 
-## Usage
+## Developer Usage
 Open app directory
 ```sh
 cd app;
 ```
 
-Create an OpenAI assistant
-```sh
-python create_assistant.py;
-```
-
 Run the Chainlit app
 ```sh
-chainlit run app.py --no-cache -w;
+chainlit run main.py -w;
 ```
 
-## Development
+## Development Notes
 
 This project uses:
 
