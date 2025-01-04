@@ -16,6 +16,10 @@ primary_region = 'dfw'
   min_machines_running = 0
   processes = ['app']
 
+[env]
+  PORT = "8080"
+  HOST = "0.0.0.0"
+
 [[vm]]
   memory = '1gb'
   cpu_kind = 'shared'
