@@ -27,4 +27,5 @@ ENV CHAINLIT_HOST=0.0.0.0
 ENV CHAINLIT_PORT=8080
 
 # Run the app
+# When developing, comment this out and run the app manually using `docker exec ww bash; chainlit run app/main.py -w`
 CMD ["python", "-m", "chainlit", "run", "app/main.py"]

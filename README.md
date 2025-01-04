@@ -22,7 +22,7 @@ Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API th
 - [OpenAI API key](https://platform.openai.com/settings/organization/api-keys)
 - [Docker](https://www.docker.com/products/docker-desktop/)
 
-## Developer Installation
+## Installation
 
 1. Clone the repository
 2. Copy `app/.env.example` to `app/.env` and add your OpenAI API key
@@ -32,24 +32,15 @@ Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API th
 - Install and run [Docker](https://www.docker.com/products/docker-desktop/), then -
 ```sh
 docker compose up -d;
-docker exec ww bash;
 ```
+- Navigate to http://localhost:8080/ in your browser
+
+## Development Instructions
 
 **[Using Devcontainer in VSCode](https://code.visualstudio.com/docs/devcontainers/tutorial) (slightly advanced, but fastest method)** 
 - Must have [Docker](https://www.docker.com/products/docker-desktop/) installed. 
 - Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 - Use vscode command -- "Dev Containers: Rebuild Container" 
-
-## Developer Usage
-Open app directory
-```sh
-cd app;
-```
-
-Run the Chainlit app
-```sh
-chainlit run main.py -w;
-```
 
 ## Development Notes
 
@@ -60,6 +51,7 @@ This project uses:
 - Black for code formatting
 - Ruff for linting
 - MyPy for type checking
+- Fly.io for deployment
 
 ## License
 
