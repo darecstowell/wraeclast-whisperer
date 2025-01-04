@@ -71,8 +71,6 @@ async def set_starters():
         "How many trial parts do you have to get through to get the level 60 ascendancy points?",
         "What is the best way to farm currency?",
         "What is the fastest way to level up?",
-        "What is the best way to get maps?",
-        "What is the best way to get currency?",
         "What is the best way to get exalted orbs?",
         "What is the best way to get chaos orbs?",
         "What is the best way to get alchemy orbs?",
@@ -95,6 +93,7 @@ async def set_starters():
 
 @cl.on_chat_start
 async def start_chat():
+    # TODO: this is creating a lot of unused threads
     # Create a Thread
     thread = await async_openai_client.beta.threads.create()
     # Store thread ID in user session for later use
@@ -108,6 +107,16 @@ async def stop_chat():
         await async_openai_client.beta.threads.runs.cancel(
             thread_id=current_run_step.thread_id, run_id=current_run_step.run_id
         )
+
+
+@cl.password_auth_callback
+def auth_callback(username: str, password: str):
+    # Fetch the user matching username from your database
+    # and compare the hashed password with the value stored in the database
+    if (username, password) == ("admin", "admin"):
+        return cl.User(identifier="admin", metadata={"role": "admin", "provider": "credentials"})
+    else:
+        return None
 
 
 @cl.on_message
