@@ -1,11 +1,14 @@
 services:
   ww:
     hostname: ww
-    build: ./
+    build: 
+      context: .
+      dockerfile: Dockerfile
     env_file:
       - path: app/.env
     ports:
       - "127.0.0.1:5007:5007"
+      - "8080:8080"
     volumes:
-      - ./:/usr/src/app/
-    command: sleep infinity  # Keep container running
+      - .:/usr/src/app/
+    # command: sleep infinity  # Keep container running
