@@ -1,4 +1,5 @@
 import os
+import random
 from pathlib import Path
 from typing import List
 
@@ -17,9 +18,9 @@ async_openai_client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 sync_openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 assistant = create_assistant(
-    client=sync_openai_client,
+    sync_client=sync_openai_client,
     name="Wraeclast Whisperer",
-    model="gpt-4o",
+    model="gpt-4o-2024-11-20",
     instructions=render_template("agent_instructions.jinja2"),
     tools=[
         {"type": "code_interpreter"},
@@ -66,12 +67,28 @@ async def process_files(files: List[Element]):
 
 @cl.set_starters
 async def set_starters():
+    general_questions = [
+        "How many trial parts do you have to get through to get the level 60 ascendancy points?",
+        "What is the best way to farm currency?",
+        "What is the fastest way to level up?",
+        "What is the best way to get maps?",
+        "What is the best way to get currency?",
+        "What is the best way to get exalted orbs?",
+        "What is the best way to get chaos orbs?",
+        "What is the best way to get alchemy orbs?",
+    ]
+
     return [
         # TODO: have the message pick at random from a list of questions
         cl.Starter(
             label="Ask a general Path of Exile 2 question",
-            message="How many trial parts do you have to get through to get the level 60 ascendancy points?",
+            message=general_questions[random.randint(0, len(general_questions) - 1)],
             icon="/public/write.svg",
+        ),
+        cl.Starter(
+            label="What is the best build for a new player?",
+            message="What is the best build for a new player?",
+            icon="/public/learn.svg",
         ),
     ]
 

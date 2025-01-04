@@ -110,7 +110,7 @@ github = "https://github.com/darecstowell/wraeclast-whisperer"
     #paper = "#FFFFFF"
 
     [UI.theme.dark.primary]
-        main = "#641209"
+        main = "#8B1B10" #red
         #dark = "#980039"
         #light = "#FFE7EB"
     [UI.theme.dark.text]

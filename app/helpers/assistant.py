@@ -1,6 +1,8 @@
 import hashlib
 import json
 
+import openai
+
 
 def _serialize_tools(tools):
     serialized = []
@@ -14,9 +16,9 @@ def _serialize_tools(tools):
     return serialized
 
 
-def create_assistant(client, name: str, model: str, instructions: str, tools: list):
+def create_assistant(sync_client: openai.OpenAI, name: str, model: str, instructions: str, tools: list):
     # List available assistants
-    assistants = client.beta.assistants.list()
+    assistants = sync_client.beta.assistants.list()
 
     serialized_tools = _serialize_tools(tools)
 
@@ -45,7 +47,7 @@ def create_assistant(client, name: str, model: str, instructions: str, tools: li
             return assistant
 
     # If assistant does not exist, create a new one
-    new_assistant = client.beta.assistants.create(
+    new_assistant = sync_client.beta.assistants.create(
         name=name,
         model=model,
         instructions=instructions,

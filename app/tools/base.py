@@ -17,6 +17,7 @@ class AssistantTool(BaseModel, ABC):
     friendly_name: str = ""
     description: str = ""
     strict: bool = True
+    parallel_tool_calls: bool = False
     parameters: Type[pydantic.BaseModel]
 
     @abstractmethod

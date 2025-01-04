@@ -19,6 +19,10 @@ class EventHandler(AsyncAssistantEventHandler):
         self.assistant_name = assistant_name
         self.async_openai_client = async_openai_client
 
+        # Track processed tool call IDs to avoid double-calls
+        self.processed_calls = set()
+        self.processed_snapshots = set()
+
     async def on_run_step_created(self, run_step: RunStep) -> None:
         cl.user_session.set("run_step", run_step)
 
@@ -56,6 +60,14 @@ class EventHandler(AsyncAssistantEventHandler):
     async def on_tool_call_created(self, tool_call):
         from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
 
+        print(f"Tool Call: {tool_call.id}")
+
+        # Skip if we've already processed this call ID
+        if tool_call.id in self.processed_calls:
+            return
+
+        self.processed_calls.add(tool_call.id)
+
         wiki_search_instance = wiki_search.WikiSearch()
         wiki_page_instance = wiki_page.WikiPage()
         fetch_sitemap_instance = fetch_sitemap.FetchSitemap()
@@ -77,6 +89,11 @@ class EventHandler(AsyncAssistantEventHandler):
         await self.current_step.send()
 
     async def on_tool_call_delta(self, delta, snapshot):
+        # Avoid reprocessing the same snapshot
+        if snapshot.id in self.processed_snapshots:
+            return
+        self.processed_snapshots.add(snapshot.id)
+
         if snapshot.id != self.current_tool_call:
             self.current_tool_call = snapshot.id
             self.current_step = cl.Step(name=delta.type, type="tool", parent_id=cl.context.current_run.id)
@@ -86,7 +103,7 @@ class EventHandler(AsyncAssistantEventHandler):
             if snapshot.type == "function":
                 self.current_step.name = snapshot.function.name
                 self.current_step.language = "json"
-            await self.current_step.send()
+            await self.current_step.update()
 
         if delta.type == "function":
             pass
@@ -139,13 +156,14 @@ class EventHandler(AsyncAssistantEventHandler):
                 if isinstance(args, str):
                     args = json.loads(args or "{}")
                 try:
+                    print(f"Running tool: {tool.function.name} with args: {args}")
                     if tool.function.name == wiki_search_instance.name:
                         function_response = wiki_search_instance.run(**args)
                     elif tool.function.name == wiki_page_instance.name:
                         self.current_step.name = f"Wiki Page: {args.get('page_name')}"
                         function_response = wiki_page_instance.run(**args)
                     elif tool.function.name == fetch_sitemap_instance.name:
-                        self.current_step.name = f"Fetched Sitemap for: {args.get('url')}"
+                        self.current_step.name = f"Fetched Sitemap for: {args.get('sitemap_url')}"
                         function_response = fetch_sitemap_instance.run(**args)
                     elif tool.function.name == load_page_content_instance.name:
                         self.current_step.name = f"Load Page Content for: {args.get('url')}"
@@ -155,6 +173,7 @@ class EventHandler(AsyncAssistantEventHandler):
                     self.current_step.output = function_response
                     self.current_step.language = "markdown"
                     tool_outputs.append({"tool_call_id": tool.id, "output": str(function_response)})
+                    # print(f"Output: {function_response}")
                 except Exception as e:
                     function_response = str(e)
                     await cl.ErrorMessage(content=str(e)).send()

@@ -11,7 +11,6 @@ _user_agent = "wraeclast-whisperer/0.0.1 (https://github.com/darecstowell) pytho
 def get_robots_txt(url: str) -> str:
     parsed_url = urlparse(url)
     base_url = f"{parsed_url.scheme}://{parsed_url.netloc}/robots.txt"
-    print(f"Fetching robots.txt from: {base_url}")
     try:
         response = requests.get(base_url, headers={"User-Agent": _user_agent}, timeout=5)
         if response.ok:
@@ -138,5 +137,7 @@ async def get_readable_content(url: str) -> str:
             return ""
         content = await page.evaluate("(main_content) => main_content.innerText", main_content)
         await browser.close()
-        print(f"Content : {content}")
         return content
+
+
+#  TODO: add function to find terms of service

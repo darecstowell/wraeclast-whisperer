@@ -1,7 +1,7 @@
 import pydantic
-from helpers import render
 from pydantic import BaseModel
 
+from app.helpers import render
 from app.tools.base import AssistantTool
 
 from .base import poe2wiki

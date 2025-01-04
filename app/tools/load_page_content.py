@@ -17,7 +17,7 @@ class LoadPageContent(AssistantTool):
     description: str = render.render_template("load_page_content_description.jinja2")
     parameters = LoadPageContentParams
 
-    async def run(self, **kwargs):
+    def run(self, **kwargs):
         page_url = kwargs.get("url", "")
         if not page_url:
             raise ValueError("url parameter is required")
@@ -26,4 +26,4 @@ class LoadPageContent(AssistantTool):
         if not is_url_allowed(page_url, robots_txt):
             raise ValueError(f"Scraping is disallowed by {page_url}")
 
-        return await get_readable_content(page_url)
+        return get_readable_content(page_url)
