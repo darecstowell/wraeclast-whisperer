@@ -1,5 +1,10 @@
 # Wraeclast Whisperer
 
+![Python Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdarecstowell%2Fwraeclast-whisperer%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.tool.poetry.dependencies.python&label=Python)
+![Chainlit Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdarecstowell%2Fwraeclast-whisperer%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.tool.poetry.dependencies.chainlit&label=Chainlit&color=red)
+![Last Deployment](https://img.shields.io/github/actions/workflow/status/darecstowell/wraeclast-whisperer/fly-deploy.yml?branch=main&label=Last%20Deployment)
+![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 A GPT-powered agent for Path of Exile 2 with up-to-date game data that helps players synergize their builds, create loot filters, answer game-related questions, and more.
 
 ![alt text](screenshots/lvl3_support_gems.png)
@@ -17,6 +22,15 @@ Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API th
 - [ ] Custom loot filter generation
 - [ ] Real-time build assessment
 
+## Data Sources
+- [x] [Official POE2 Wiki](https://www.poe2wiki.net/wiki/Path_of_Exile_2_Wiki)
+- [x] Web searches (responsibly -- respects robots.txt and sitemaps)
+- [ ] PoE 2 Game Data
+- [ ] PoE 2 Api
+- [ ] YouTube Transcripts
+
+None of the data mentioned above (except for game data) is stored or used for any other purposes. This data is requested by the user and is only accessible during the user's chat interface session.
+
 ## Prerequisites
 
 - [OpenAI API key](https://platform.openai.com/settings/organization/api-keys)
@@ -25,7 +39,10 @@ Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API th
 ## Installation
 
 1. Clone the repository
-2. Copy `app/.env.example` to `app/.env` and add your OpenAI API key
+2. Copy `.env.example` to `.env` and add your OpenAI API key
+    ```sh
+    cp .env.example .env
+    ```
 3. Choose your preferred installation method:
 
 **Using Docker**
@@ -42,15 +59,21 @@ docker compose up -d;
 - Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 - Use vscode command -- "Dev Containers: Rebuild Container" 
 
+## Login (for the short-term)
+Email: admin
+
+Password: admin
+
 ## Development Notes
 
 This project uses:
 
-- Chainlit as an LLM framework with UI
 - Poetry for dependency management
 - Black for code formatting
 - Ruff for linting
 - MyPy for type checking
+- Chainlit as an LLM framework with UI
+- Playwright for rendered web scraping
 - Fly.io for deployment
 
 ## License

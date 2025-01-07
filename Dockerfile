@@ -9,14 +9,17 @@ RUN mamba env update --file environment.yaml \
 # Install python dependencies
 COPY pyproject.toml .
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction \
+    && poetry install --no-interaction --no-root \
     && poetry cache clear pypi --all
 
-# Install playwright
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=America/Chicago
+# Install playwright and cleanup
+ENV DEBIAN_FRONTEND=noninteractive \
+    TZ=America/Chicago
 RUN playwright install-deps \
-    && playwright install
+    && playwright install \
+    && rm -rf /root/.cache/ms-playwright \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy the rest of the files
 COPY . .

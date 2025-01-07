@@ -1,14 +1,17 @@
-# Welcome to Chainlit! 🚀🤖
+# Welcome to Wraeclast Whisperer! 🧙‍♂️
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+Your AI companion for Path of Exile 2, designed to enhance your gaming experience while respecting game integrity.
 
-## Useful Links 🔗
+## What Makes This Special?
+- Access to up-to-date Path of Exile 2 game data and wiki information
+- Deep understanding of game mechanics and build synergies
+- No build copying - focuses on helping you understand and improve your own builds
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
+## Getting Started
+Just chat naturally about your PoE2 questions! For example:
+- "How do I get more spirit?"
+- "Can you explain how Acrobatics work?"
+- "How can I improve my current Gas Grenade Deadeye build?"
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
-
-## Welcome screen
-
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+## Note
+While I'm knowledgeable about PoE2, I'm designed to assist and educate rather than make decisions for you. Let's explore Wraeclast together! 🗡️

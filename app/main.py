@@ -68,6 +68,7 @@ async def process_files(files: List[Element]):
 @cl.set_starters
 async def set_starters():
     general_questions = [
+        "How do I get more spirit?",
         "How many trial parts do you have to get through to get the level 60 ascendancy points?",
         "What is the best way to farm currency?",
         "What is the fastest way to level up?",

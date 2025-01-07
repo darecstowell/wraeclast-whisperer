@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file:
-      - path: app/.env
+      - path: .env
     ports:
       - "127.0.0.1:5007:5007"
       - "8080:8080"
