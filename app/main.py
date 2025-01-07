@@ -92,13 +92,9 @@ async def set_starters():
     ]
 
 
-@cl.on_chat_start
-async def start_chat():
-    # TODO: this is creating a lot of unused threads
-    # Create a Thread
-    thread = await async_openai_client.beta.threads.create()
-    # Store thread ID in user session for later use
-    cl.user_session.set("thread_id", thread.id)
+# @cl.on_chat_start
+# async def start_chat():
+#     app_user = cl.user_session.get("user")
 
 
 @cl.on_stop
@@ -123,6 +119,9 @@ def auth_callback(username: str, password: str):
 @cl.on_message
 async def main(message: cl.Message):
     thread_id = cl.user_session.get("thread_id")
+    if not thread_id:
+        thread = await async_openai_client.beta.threads.create()
+        thread_id = thread.id
 
     attachments = await process_files(message.elements)
 
