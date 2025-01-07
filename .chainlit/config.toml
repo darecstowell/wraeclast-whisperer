@@ -69,8 +69,7 @@ github = "https://github.com/darecstowell/wraeclast-whisperer"
 # custom_js = "/public/test.js"
 
 # Specify a custom meta image url.
-# TODO
-# custom_meta_image_url = "https://chainlit-cloud.s3.eu-west-3.amazonaws.com/logo/chainlit_banner.png"
+custom_meta_image_url = "https://pathofexile2.wiki.fextralife.com/file/Path-of-Exile-2/act3_early_acess_poe2_wiki_guide300px.jpg"
 
 # Specify a custom build directory for the frontend.
 # This can be used to customize the frontend code.
