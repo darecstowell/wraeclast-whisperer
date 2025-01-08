@@ -9,29 +9,43 @@
 
 </div>
 
-A GPT-powered agent for Path of Exile 2 with up-to-date game data that helps players synergize their builds, create loot filters, answer game-related questions, and more.
+A GPT-powered agent for Path of Exile 2 with up-to-date game data that helps players synergize their builds, assess their gear, search for valuable trades, create loot filters, answer game-related questions, and more.
 
 ![alt text](screenshots/lvl3_support_gems.png)
 
 ## Description
 
-Wraeclast Whisperer is an intelligent agent powered by OpenAI's Assistant API that provides personalized guidance for Path of Exile 2 players. It analyzes current game data and player statistics to offer insights and recommendations. This agent is not intended to create builds for you, but rather aid you on your journey. 
+This GPT-powered agent analyzes PoE2 wiki data, popular PoE2 build webpages, current game data, and real-time player data to offer insights and recommendations. This agent is not intended to create builds for you but to aid you on your journey. 
 
-## Features (Planned)
+## Planned Features
 
-- [x] General game knowledge assistance
-- [x] Build optimization suggestions
-- [ ] Gear improvement recommendations  
-- [ ] Skill gem synergy analysis
-- [ ] Custom loot filter generation
-- [ ] Real-time build assessment
+### Completed
+- [X] **General Game Knowledge Assistance**  
+  e.g., "How does Acrobatics work?"
+
+- [X] **Build Optimization Suggestions**  
+  e.g., "What are the meta builds right now?"
+
+### In Progress / Upcoming
+- [ ] **Gear Upgrade Assessment**  
+  Upload a screenshot of an item and ask, "Is this an upgrade for me?"
+
+- [ ] **Synergies Analysis**  
+  e.g., "What skill gems work well with X?"
+
+- [ ] **Tailored Loot Filter Generation**  
+  e.g., "Make a basic early-game loot filter for my character that ignores grey items."
+
+- [ ] **Trade Search**  
+  e.g., "What are some good swords available on the market for my character?"
 
 ## Data Sources
 - [x] [Official POE2 Wiki](https://www.poe2wiki.net/wiki/Path_of_Exile_2_Wiki)
 - [x] Web searches (responsibly -- respects robots.txt and sitemaps)
 - [ ] PoE 2 Game Data
-- [ ] PoE 2 Api
+- [ ] PoE 2 Api - 
 - [ ] YouTube Transcripts
+
 
 None of the data mentioned above (except for game data) is stored or used for any other purposes. This data is requested by the user and is only accessible during the user's chat interface session.
 
