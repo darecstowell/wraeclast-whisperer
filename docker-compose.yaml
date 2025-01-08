@@ -11,4 +11,21 @@ services:
       - "8080:8080"
     volumes:
       - .:/usr/src/app/
+    networks:
+      - app-network
     # command: sleep infinity  # Keep container running
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

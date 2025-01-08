@@ -1,13 +1,9 @@
 import json
-import os
 
 import chainlit as cl
 from literalai.helper import utc_now
 from openai import AsyncAssistantEventHandler, AsyncOpenAI
 from openai.types.beta.threads.runs import RunStep
-
-# TODO: share this with app.py
-async_openai_client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
 class EventHandler(AsyncAssistantEventHandler):
@@ -35,27 +31,27 @@ class EventHandler(AsyncAssistantEventHandler):
 
     async def on_text_done(self, text):
         await self.current_message.update()
-        if text.annotations:
-            for annotation in text.annotations:
-                if annotation.type == "file_path":
-                    response = await self.async_openai_client.files.with_raw_response.content(
-                        annotation.file_path.file_id
-                    )
-                    file_name = annotation.text.split("/")[-1]
-                    # TODO: render stuff?
-                    # try:
-                    #     fig = plotly.io.from_json(response.content)
-                    #     element = cl.Plotly(name=file_name, figure=fig)
-                    #     await cl.Message(content="", elements=[element]).send()
-                    # except Exception:
-                    #     element = cl.File(content=response.content, name=file_name)
-                    #     await cl.Message(content="", elements=[element]).send()
-                    # Hack to fix links
-                    # if annotation.text in self.current_message.content and element.chainlit_key:
-                    #     self.current_message.content = self.current_message.content.replace(
-                    #         annotation.text, f"/project/file/{element.chainlit_key}?session_id={cl.context.session.id}"
-                    #     )
-                    #     await self.current_message.update()
+        # TODO: render stuff?
+        # if text.annotations:
+        #     for annotation in text.annotations:
+        #         if annotation.type == "file_path":
+        #             response = await self.async_openai_client.files.with_raw_response.content(
+        #                 annotation.file_path.file_id
+        #             )
+        #             file_name = annotation.text.split("/")[-1]
+        #             try:
+        #                 fig = plotly.io.from_json(response.content)
+        #                 element = cl.Plotly(name=file_name, figure=fig)
+        #                 await cl.Message(content="", elements=[element]).send()
+        #             except Exception:
+        #                 element = cl.File(content=response.content, name=file_name)
+        #                 await cl.Message(content="", elements=[element]).send()
+        #             Hack to fix links
+        #             if annotation.text in self.current_message.content and element.chainlit_key:
+        #                 self.current_message.content = self.current_message.content.replace(
+        #                     annotation.text, f"/project/file/{element.chainlit_key}?session_id={cl.context.session.id}"
+        #                 )
+        #                 await self.current_message.update()
 
     async def on_tool_call_created(self, tool_call):
         from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
@@ -160,13 +156,13 @@ class EventHandler(AsyncAssistantEventHandler):
                     if tool.function.name == wiki_search_instance.name:
                         function_response = wiki_search_instance.run(**args)
                     elif tool.function.name == wiki_page_instance.name:
-                        self.current_step.name = f"Wiki Page: {args.get('page_name')}"
+                        # self.current_step.name = f"Wiki Page: {args.get('page_name')}"
                         function_response = wiki_page_instance.run(**args)
                     elif tool.function.name == fetch_sitemap_instance.name:
-                        self.current_step.name = f"Fetched Sitemap for: {args.get('sitemap_url')}"
+                        # self.current_step.name = f"Fetched Sitemap for: {args.get('sitemap_url')}"
                         function_response = fetch_sitemap_instance.run(**args)
                     elif tool.function.name == load_page_content_instance.name:
-                        self.current_step.name = f"Load Page Content for: {args.get('url')}"
+                        # self.current_step.name = f"Load Page Content for: {args.get('url')}"
                         function_response = await load_page_content_instance.run(**args)
                     self.current_step.show_input = "json"
                     self.current_step.input = args
@@ -186,7 +182,7 @@ class EventHandler(AsyncAssistantEventHandler):
 
     async def submit_tool_outputs(self, tool_outputs, run_id):
         # Use the submit_tool_outputs_stream helper
-        async with async_openai_client.beta.threads.runs.submit_tool_outputs_stream(
+        async with self.async_openai_client.beta.threads.runs.submit_tool_outputs_stream(
             thread_id=self.current_run.thread_id,
             run_id=self.current_run.id,
             tool_outputs=tool_outputs,

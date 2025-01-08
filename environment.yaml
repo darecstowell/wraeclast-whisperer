@@ -1,8 +1,9 @@
 name: base
 channels:
-  - conda-forge
+    - conda-forge
 dependencies:
-  - binutils
-  - gcc
-  - poetry
-  - python=3.12
+    - binutils
+    - gcc
+    - poetry
+    - python=3.12
+    - asyncpg

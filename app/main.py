@@ -1,26 +1,33 @@
-import os
+import logging
 import random
 from pathlib import Path
 from typing import List
 
 import chainlit as cl
 from chainlit.config import config
+from chainlit.data.sql_alchemy import SQLAlchemyDataLayer
 from chainlit.element import Element
 from openai import AsyncOpenAI, OpenAI
 from openai.types.beta.threads.runs import RunStep
 
+from app import settings
 from app.helpers.assistant import create_assistant
 from app.helpers.events import EventHandler
 from app.helpers.render import render_template
+from app.settings import OPENAI_API_KEY, OPENAI_MODEL
 from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
 
-async_openai_client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-sync_openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+async_openai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+sync_openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 assistant = create_assistant(
     sync_client=sync_openai_client,
     name="Wraeclast Whisperer",
-    model="gpt-4o-2024-11-20",
+    model=OPENAI_MODEL,
     instructions=render_template("agent_instructions.jinja2"),
     tools=[
         {"type": "code_interpreter"},
@@ -43,6 +50,7 @@ async def upload_files(files: List[Element]):
 
 
 async def process_files(files: List[Element]):
+    # TODO: Process images i.e. screenshots of items
     # Upload files if any and get file_ids
     file_ids = []
     if len(files) > 0:
@@ -58,6 +66,7 @@ async def process_files(files: List[Element]):
                 "text/markdown",
                 "application/pdf",
                 "text/plain",
+                "text/html",
             ]
             else [{"type": "code_interpreter"}],
         }
@@ -108,12 +117,20 @@ async def stop_chat():
 
 @cl.password_auth_callback
 def auth_callback(username: str, password: str):
+    logger.info(f"Authenticating user: {username}")
     # Fetch the user matching username from your database
     # and compare the hashed password with the value stored in the database
     if (username, password) == ("admin", "admin"):
+        logger.info("Authentication successful")
         return cl.User(identifier="admin", metadata={"role": "admin", "provider": "credentials"})
     else:
+        logger.warning("Authentication failed")
         return None
+
+
+@cl.data_layer
+def get_data_layer():
+    return SQLAlchemyDataLayer(conninfo=settings.DATABASE_URL)
 
 
 @cl.on_message

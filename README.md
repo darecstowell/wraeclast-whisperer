@@ -1,9 +1,13 @@
+<div align="center">
+
 # Wraeclast Whisperer
 
 ![Python Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdarecstowell%2Fwraeclast-whisperer%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.tool.poetry.dependencies.python&label=Python)
 ![Chainlit Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdarecstowell%2Fwraeclast-whisperer%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.tool.poetry.dependencies.chainlit&label=Chainlit&color=red)
 ![Last Deployment](https://img.shields.io/github/actions/workflow/status/darecstowell/wraeclast-whisperer/fly-deploy.yml?branch=main&label=Last%20Deployment)
 ![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+</div>
 
 A GPT-powered agent for Path of Exile 2 with up-to-date game data that helps players synergize their builds, create loot filters, answer game-related questions, and more.
 
