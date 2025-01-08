@@ -5,12 +5,10 @@ from typing import List
 
 import chainlit as cl
 from chainlit.config import config
-from chainlit.data.sql_alchemy import SQLAlchemyDataLayer
 from chainlit.element import Element
 from openai import AsyncOpenAI, OpenAI
 from openai.types.beta.threads.runs import RunStep
 
-from app import settings
 from app.helpers.assistant import create_assistant
 from app.helpers.events import EventHandler
 from app.helpers.render import render_template
@@ -115,22 +113,22 @@ async def stop_chat():
         )
 
 
-@cl.password_auth_callback
-def auth_callback(username: str, password: str):
-    logger.info(f"Authenticating user: {username}")
-    # Fetch the user matching username from your database
-    # and compare the hashed password with the value stored in the database
-    if (username, password) == ("admin", "admin"):
-        logger.info("Authentication successful")
-        return cl.User(identifier="admin", metadata={"role": "admin", "provider": "credentials"})
-    else:
-        logger.warning("Authentication failed")
-        return None
+# @cl.password_auth_callback
+# def auth_callback(username: str, password: str):
+#     logger.info(f"Authenticating user: {username}")
+#     # Fetch the user matching username from your database
+#     # and compare the hashed password with the value stored in the database
+#     if (username, password) == ("admin", "admin"):
+#         logger.info("Authentication successful")
+#         return cl.User(identifier="admin", metadata={"role": "admin", "provider": "credentials"})
+#     else:
+#         logger.warning("Authentication failed")
+#         return None
 
 
-@cl.data_layer
-def get_data_layer():
-    return SQLAlchemyDataLayer(conninfo=settings.DATABASE_URL)
+# @cl.data_layer
+# def get_data_layer():
+#     return SQLAlchemyDataLayer(conninfo=settings.DATABASE_URL)
 
 
 @cl.on_message
