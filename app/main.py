@@ -130,7 +130,7 @@ def auth_callback(username: str, password: str):
 
 @cl.data_layer
 def get_data_layer():
-    return SQLAlchemyDataLayer(conninfo=settings.DATABASE_URL)
+    return SQLAlchemyDataLayer(conninfo=settings.DATABASE_URL, ssl_require=True, show_logger=True)
 
 
 @cl.on_message
