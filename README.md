@@ -91,11 +91,12 @@ This project uses:
 - Black for code formatting
 - Ruff for linting
 - MyPy for type checking
-- Chainlit as an LLM framework with UI
+- Chainlit as an agent framework with beautiful UI
 - Playwright for rendered web scraping
 - Fly.io for deployment
 
 ## License
+This is an unofficial Path of Exile 2 app and is not affiliated with or endorsed by Grinding Gear Games.
 
 This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 
@@ -103,11 +104,14 @@ You are free to:
 
 - Share — Copy and redistribute the material in any medium or format.
 - Adapt — Remix, transform, and build upon the material.
+
 The licensor cannot revoke these freedoms as long as you follow the license terms.
+
+This software is provided solely for personal and non-commercial use. Any use of this software or its derivatives for commercial purposes is strictly prohibited.
 
 See the LICENSE file for details.
 
 ## Acknowledgments
 
-- Path of Exile 2 and all related content are property of Grinding Gear Games. Go Support them!
-- Chainlit
+- Path of Exile 2 and all related content are the property of Grinding Gear Games. This Go Support them!
+- [Chainlit](https://chainlit.io/)
