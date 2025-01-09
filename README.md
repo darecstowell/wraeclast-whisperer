@@ -97,7 +97,13 @@ This project uses:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+
+You are free to:
+
+Share — Copy and redistribute the material in any medium or format.
+Adapt — Remix, transform, and build upon the material.
+The licensor cannot revoke these freedoms as long as you follow the license terms - see the LICENSE file for details.
 
 ## Acknowledgments
 
