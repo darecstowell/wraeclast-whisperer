@@ -101,9 +101,11 @@ This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAl
 
 You are free to:
 
-Share — Copy and redistribute the material in any medium or format.
-Adapt — Remix, transform, and build upon the material.
-The licensor cannot revoke these freedoms as long as you follow the license terms - see the LICENSE file for details.
+- Share — Copy and redistribute the material in any medium or format.
+- Adapt — Remix, transform, and build upon the material.
+The licensor cannot revoke these freedoms as long as you follow the license terms.
+
+See the LICENSE file for details.
 
 ## Acknowledgments
 
