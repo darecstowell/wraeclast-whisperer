@@ -89,6 +89,10 @@ def generate_starters() -> List[cl.Starter]:
         "What is the best way to get alchemy orbs?",
     ]
 
+    endgame_questions = [
+        "What's a Citadel?",
+    ]
+
     return [
         cl.Starter(
             label="Ask a general Path of Exile 2 question",
@@ -99,6 +103,11 @@ def generate_starters() -> List[cl.Starter]:
             label="What is the best build for a new player?",
             message="What is the best build for a new player?",
             icon="/public/learn.svg",
+        ),
+        cl.Starter(
+            label="Ask an endgame question",
+            message=endgame_questions[random.randint(0, len(endgame_questions) - 1)],
+            icon="/public/idea.svg",
         ),
     ]
 
@@ -141,6 +150,7 @@ async def main(message: cl.Message):
     thread_id = cl.user_session.get("thread_id")
     if not thread_id:
         thread = await async_openai_client.beta.threads.create()
+        cl.user_session.set("thread_id", thread.id)
         thread_id = thread.id
 
     # Process files
