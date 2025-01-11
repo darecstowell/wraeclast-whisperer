@@ -1,10 +1,13 @@
+import asyncio
 import logging
 import random
 from pathlib import Path
 from typing import List
 
+import bcrypt
 import chainlit as cl
 from chainlit.config import config
+from chainlit.data.chainlit_data_layer import ChainlitDataLayer
 from chainlit.element import Element
 from openai import AsyncOpenAI, OpenAI
 from openai.types.beta.threads.runs import RunStep
@@ -12,7 +15,7 @@ from openai.types.beta.threads.runs import RunStep
 from app.helpers.assistant import create_assistant
 from app.helpers.events import EventHandler
 from app.helpers.render import render_template
-from app.settings import OPENAI_API_KEY, OPENAI_MODEL
+from app.settings import DATABASE_URL, OPENAI_API_KEY, OPENAI_MODEL
 from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
 
 # Configure logging
@@ -72,8 +75,10 @@ async def process_files(files: List[Element]):
     ]
 
 
-@cl.set_starters
-async def set_starters():
+def generate_starters() -> List[cl.Starter]:
+    """
+    Generate a list of starters for the user to choose from
+    """
     general_questions = [
         "How do I get more spirit?",
         "How many trial parts do you have to get through to get the level 60 ascendancy points?",
@@ -98,6 +103,11 @@ async def set_starters():
     ]
 
 
+@cl.set_starters
+def starters():
+    return generate_starters()
+
+
 @cl.on_stop
 async def stop_chat():
     current_run_step: RunStep = cl.user_session.get("run_step")
@@ -110,13 +120,18 @@ async def stop_chat():
 @cl.password_auth_callback
 def auth_callback(username: str, password: str):
     logger.info(f"Authenticating user: {username}")
-    # Fetch the user matching username from your database
-    # and compare the hashed password with the value stored in the database
-    if (username, password) == ("admin", "admin"):
+    # TODO: probably don't need to re-initalize the data layer every time
+    user = asyncio.run(ChainlitDataLayer(DATABASE_URL).get_user(username))
+    if not user:
+        logger.warning("Authentication failed: user not found")
+        return None
+
+    # Compare hashed password
+    if bcrypt.checkpw(password.encode("utf-8"), user.metadata["password"].encode("utf-8")):
         logger.info("Authentication successful")
-        return cl.User(identifier="admin", metadata={"role": "admin", "provider": "credentials"})
+        return cl.User(identifier=username, metadata=user.metadata)
     else:
-        logger.warning("Authentication failed")
+        logger.warning("Authentication failed: incorrect password")
         return None
 
 

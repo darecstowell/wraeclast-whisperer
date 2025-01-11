@@ -61,7 +61,8 @@ None of the data mentioned above (except for game data) is stored or used for an
     cp .env.example .env
     ```
 3. See data/README.md for setting up the database & datalayer.
-4. Choose your preferred installation method:
+4. Create a user - `DATABASE_URL=postgresql://root:root@db:5432/postgres python scripts/create_user.py --username {USER} --password {PASSWORD}`
+5. Choose your preferred installation method:
 
 **Using Docker**
 - Install and run [Docker](https://www.docker.com/products/docker-desktop/), then -
