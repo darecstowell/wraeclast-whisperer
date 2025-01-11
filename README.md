@@ -60,7 +60,8 @@ None of the data mentioned above (except for game data) is stored or used for an
     ```sh
     cp .env.example .env
     ```
-3. Choose your preferred installation method:
+3. See data/README.md for setting up the database & datalayer.
+4. Choose your preferred installation method:
 
 **Using Docker**
 - Install and run [Docker](https://www.docker.com/products/docker-desktop/), then -
