@@ -113,17 +113,17 @@ async def stop_chat():
         )
 
 
-# @cl.password_auth_callback
-# def auth_callback(username: str, password: str):
-#     logger.info(f"Authenticating user: {username}")
-#     # Fetch the user matching username from your database
-#     # and compare the hashed password with the value stored in the database
-#     if (username, password) == ("admin", "admin"):
-#         logger.info("Authentication successful")
-#         return cl.User(identifier="admin", metadata={"role": "admin", "provider": "credentials"})
-#     else:
-#         logger.warning("Authentication failed")
-#         return None
+@cl.password_auth_callback
+def auth_callback(username: str, password: str):
+    logger.info(f"Authenticating user: {username}")
+    # Fetch the user matching username from your database
+    # and compare the hashed password with the value stored in the database
+    if (username, password) == ("admin", "admin"):
+        logger.info("Authentication successful")
+        return cl.User(identifier="admin", metadata={"role": "admin", "provider": "credentials"})
+    else:
+        logger.warning("Authentication failed")
+        return None
 
 
 # @cl.data_layer
