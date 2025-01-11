@@ -30,11 +30,11 @@ This will then give you a connection string for the database. In my experince, t
 
 Then set your secret environment variables -
 - ```bash 
-  fly secrets set OPENAI_API_KEY=sk-proj-
-  ```
+    fly secrets set OPENAI_API_KEY=sk-proj-
+    ```
 - ```bash 
-  fly secrets set CHAINLIT_AUTH_SECRET=keepitsecretkeepitsafe```
-  ```
+    fly secrets set CHAINLIT_AUTH_SECRET=keepitsecretkeepitsafe
+    ```
 - ```bash 
     fly secrets set OPENAI_MODEL=gpt-4o-2024-11-20
     ```
