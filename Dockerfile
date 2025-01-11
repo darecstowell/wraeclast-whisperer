@@ -17,7 +17,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     TZ=America/Chicago
 RUN playwright install-deps \
     && playwright install \
-    && rm -rf /root/.cache/ms-playwright \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

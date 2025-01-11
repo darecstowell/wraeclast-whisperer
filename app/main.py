@@ -85,7 +85,6 @@ async def set_starters():
     ]
 
     return [
-        # TODO: have the message pick at random from a list of questions
         cl.Starter(
             label="Ask a general Path of Exile 2 question",
             message=general_questions[random.randint(0, len(general_questions) - 1)],
@@ -97,11 +96,6 @@ async def set_starters():
             icon="/public/learn.svg",
         ),
     ]
-
-
-# @cl.on_chat_start
-# async def start_chat():
-#     app_user = cl.user_session.get("user")
 
 
 @cl.on_stop
@@ -126,22 +120,19 @@ def auth_callback(username: str, password: str):
         return None
 
 
-# @cl.data_layer
-# def get_data_layer():
-#     return SQLAlchemyDataLayer(conninfo=settings.DATABASE_URL, show_logger=True)
-
-
 @cl.on_message
 async def main(message: cl.Message):
+    # get or create a thread
     thread_id = cl.user_session.get("thread_id")
     if not thread_id:
         thread = await async_openai_client.beta.threads.create()
         thread_id = thread.id
 
+    # Process files
     attachments = await process_files(message.elements)
 
     # Add a Message to the Thread
-    oai_message = await async_openai_client.beta.threads.messages.create(
+    await async_openai_client.beta.threads.messages.create(
         thread_id=thread_id,
         role="user",
         content=message.content,
