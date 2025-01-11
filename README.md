@@ -10,7 +10,8 @@
 
 A GPT-powered agent for Path of Exile 2 with up-to-date game data that helps players synergize their builds, assess their gear, search for valuable trades, create loot filters, answer game-related questions, and more.
 
-![alt text](screenshots/lvl3_support_gems.png)
+![alt text](screenshots/home-page.png)
+![alt text](screenshots/lvl-3-support-gems.png)
 
 ## Description
 
