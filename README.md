@@ -82,11 +82,6 @@ docker compose up -d;
 - Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 - Use vscode command -- "Dev Containers: Rebuild Container" 
 
-## Login (for the short-term)
-Email: admin
-
-Password: admin
-
 ## Development Notes
 
 This project uses:
