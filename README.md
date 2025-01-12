@@ -42,6 +42,7 @@ This GPT-powered agent analyzes PoE2 wiki data, popular PoE2 build webpages, cur
 ## Data Sources
 - [x] [Official POE2 Wiki](https://www.poe2wiki.net/wiki/Path_of_Exile_2_Wiki)
 - [x] Web searches (responsibly -- respects robots.txt and sitemaps)
+- [ ] PoE 2 Client Logs
 - [ ] PoE 2 Game Data
 - [ ] PoE 2 API (not yet available) - Trade data, non-authenticated player data
 - [ ] YouTube Transcripts
