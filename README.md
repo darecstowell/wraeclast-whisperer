@@ -23,7 +23,7 @@ This GPT-powered agent analyzes PoE2 wiki data, popular PoE2 build webpages, cur
 - [X] **General Game Knowledge Assistance**  
   e.g., "How does Acrobatics work?"
 
-- [X] **Build Optimization Suggestions**  
+- [X] **Build Suggestions**  
   e.g., "What are the meta builds right now?"
 
 ### In Progress / Upcoming
