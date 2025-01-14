@@ -12,11 +12,11 @@ from chainlit.element import Element
 from openai import AsyncOpenAI, OpenAI
 from openai.types.beta.threads.runs import RunStep
 
-from app.helpers.assistant import create_assistant
+from app.helpers.assistant import get_or_create_assistant
 from app.helpers.events import EventHandler
 from app.helpers.render import render_template
 from app.settings import DATABASE_URL, OPENAI_API_KEY, OPENAI_MODEL
-from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
+from app.tools import load_page_content, sitemap_crawler, wiki_page, wiki_search
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -25,7 +25,14 @@ logger = logging.getLogger(__name__)
 async_openai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 sync_openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
-assistant = create_assistant(
+tools_list = [
+    wiki_search.WikiSearch(),  # type: ignore
+    wiki_page.WikiPage(),  # type: ignore
+    sitemap_crawler.SitemapCrawler(),  # type: ignore
+    load_page_content.LoadPageContent(),  # type: ignore
+]
+# TODO: this is currently creating a new assistant every time the app is restarted
+assistant = get_or_create_assistant(
     sync_client=sync_openai_client,
     name="Wraeclast Whisperer",
     model=OPENAI_MODEL,
@@ -33,11 +40,8 @@ assistant = create_assistant(
     tools=[
         {"type": "code_interpreter"},
         {"type": "file_search"},
-        {"type": "function", "function": wiki_search.WikiSearch().function_schema},
-        {"type": "function", "function": wiki_page.WikiPage().function_schema},
-        {"type": "function", "function": fetch_sitemap.FetchSitemap().function_schema},
-        {"type": "function", "function": load_page_content.LoadPageContent().function_schema},
-    ],
+    ]
+    + [{"type": "function", "function": t.function_schema} for t in tools_list],
 )
 config.ui.name = assistant.name or "Wraeclast Whisperer"
 
@@ -144,6 +148,11 @@ def auth_callback(username: str, password: str):
         return None
 
 
+# @cl.oauth_callback
+# def oauth_callback(provider: str, code: str):
+#     logger.info(f"OAuth callback received for provider: {provider}")
+
+
 @cl.on_message
 async def main(message: cl.Message):
     # get or create a thread
@@ -168,6 +177,10 @@ async def main(message: cl.Message):
     async with async_openai_client.beta.threads.runs.stream(
         thread_id=thread_id,
         assistant_id=assistant.id,
-        event_handler=EventHandler(assistant_name=assistant.name, async_openai_client=async_openai_client),
+        event_handler=EventHandler(
+            assistant_name=assistant.name,
+            async_openai_client=async_openai_client,
+            assistant_tools=tools_list,
+        ),
     ) as stream:
         await stream.until_done()

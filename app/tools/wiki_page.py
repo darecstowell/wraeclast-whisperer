@@ -12,24 +12,20 @@ class WikiPageParams(BaseModel):
 
 
 class WikiPage(AssistantTool):
-    name: str = "wiki_page"
-    friendly_name: str = "PoE2 Wiki Load Page"
+    name: str = "wiki_load_page"
+    friendly_name: str = "Wiki Page Loader"
     description: str = render.render_template("wiki_page_description.jinja2")
     parameters = WikiPageParams
 
-    def run(self, **kwargs):
+    def run(self, **kwargs) -> str:
         page_name = kwargs.get("page_name", "")
         if not page_name:
             raise ValueError("page_name is required")
+        # TODO: render template instead
         page = poe2wiki.page(page_name)
-        # TODO render as markdown using template instead
-        result_lines = [
-            "== Title ==",
-            page.title,
-            "== Summary ==",
-            page.summary,
-            page.content,
-            "== Links ==",
-            str(page.links),
-        ]
-        return "\n".join(result_lines)
+        markdown = f"{page.content}\n\n"
+        # This is a bit much for now
+        # markdown += "## Wiki Page Links \n\n"
+        # for link in page.links:
+        #     markdown += f"- {link}\n"
+        return markdown

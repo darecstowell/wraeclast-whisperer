@@ -1,0 +1,13 @@
+{%- if results %}
+## Wiki Pages found for search: '{{ search_term }}'
+{%- else %}
+No results found.
+{%- endif %}
+
+{%- for result in results %}
+- {{ result }}
+{%- endfor %}
+
+{%- if suggestion %}
+Suggestion: {{ suggestion }}
+{%- endif %}
