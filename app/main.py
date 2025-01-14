@@ -16,7 +16,7 @@ from app.helpers.assistant import get_or_create_assistant
 from app.helpers.events import EventHandler
 from app.helpers.render import render_template
 from app.settings import DATABASE_URL, OPENAI_API_KEY, OPENAI_MODEL
-from app.tools import load_page_content, sitemap_crawler, wiki_page, wiki_search
+from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -28,7 +28,7 @@ sync_openai_client = OpenAI(api_key=OPENAI_API_KEY)
 tools_list = [
     wiki_search.WikiSearch(),  # type: ignore
     wiki_page.WikiPage(),  # type: ignore
-    sitemap_crawler.SitemapCrawler(),  # type: ignore
+    fetch_sitemap.FetchSitemap(),  # type: ignore
     load_page_content.LoadPageContent(),  # type: ignore
 ]
 # TODO: this is currently creating a new assistant every time the app is restarted
