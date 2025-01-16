@@ -5,7 +5,6 @@ from app.helpers import render
 from app.helpers.scrape import get_readable_content, get_robots_txt, is_url_allowed
 from app.tools.base import AssistantTool
 
-
 class LoadPageContentParams(BaseModel):
     url: str = pydantic.Field(..., description="")
 
@@ -26,5 +25,4 @@ class LoadPageContent(AssistantTool):
         result = await get_readable_content(page_url)
         if not result:
             raise ValueError(f"No content found at {page_url}\n Please verify the URL and try again.")
-        print(result)
         return result

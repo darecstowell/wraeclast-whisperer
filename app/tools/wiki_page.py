@@ -6,6 +6,28 @@ from app.tools.base import AssistantTool
 
 from .base import poe2wiki
 
+def condense_wiki_text(wiki_content: str) -> str:
+    """
+    Parse and condense wiki content output into paragraphs separated by newlines
+    """
+    # Split content into paragraphs
+    paragraphs = []
+    current_para = []
+    for line in wiki_content.split('\n'):
+        line = line.strip()
+        # Skip empty lines and wiki markup
+        # 
+        if not line or line.startswith('=='):
+            if current_para:
+                paragraphs.append(' '.join(current_para))
+                current_para = []
+            continue
+        current_para.append(line)
+    # Add final paragraph if exists
+    if current_para:
+        paragraphs.append(' '.join(current_para))
+    return '\n'.join(paragraphs)
+
 
 class WikiPageParams(BaseModel):
     page_name: str = pydantic.Field(..., description="")
@@ -21,11 +43,5 @@ class WikiPage(AssistantTool):
         page_name = kwargs.get("page_name", "")
         if not page_name:
             raise ValueError("page_name is required")
-        # TODO: render template instead
         page = poe2wiki.page(page_name)
-        markdown = f"{page.content}\n\n"
-        # This is a bit much for now
-        # markdown += "## Wiki Page Links \n\n"
-        # for link in page.links:
-        #     markdown += f"- {link}\n"
-        return markdown
+        return condense_wiki_text(page.content)
