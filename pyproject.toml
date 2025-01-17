@@ -25,3 +25,5 @@ asyncpg = "*"
 colorama = "^0.4.6" # added to fix poetry install issue
 aiohttp = "^3.11.11"
 bcrypt = "^4.2.1"
+pgvector = "^0.3.6"
+sqlalchemy = "^2.0.37"

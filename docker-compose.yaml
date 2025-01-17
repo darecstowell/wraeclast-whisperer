@@ -17,7 +17,8 @@ services:
 
   # Note: this is for local development only
   db:
-    image: postgres:latest
+    #This adds pgvector to the Postgres image (https://github.com/pgvector/pgvector?tab=readme-ov-file#docker)
+    image: pgvector/pgvector:pg17
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
