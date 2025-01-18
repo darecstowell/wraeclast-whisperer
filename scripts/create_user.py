@@ -8,8 +8,8 @@ from chainlit.user import User
 from app.settings import DATABASE_URL
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--username", help="Username")
-parser.add_argument("--password", help="Password")
+parser.add_argument("--username", help="Username", default="admin")
+parser.add_argument("--password", help="Password", default="admin")
 args = parser.parse_args()
 
 

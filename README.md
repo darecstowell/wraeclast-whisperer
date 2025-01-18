@@ -15,11 +15,12 @@ A GPT-powered agent for Path of Exile 2 with up-to-date game data that helps pla
 
 ## Description
 
-This GPT-powered agent analyzes PoE2 wiki data, popular PoE2 build webpages, current game data, and real-time player data to offer insights and recommendations. This agent is not intended to create builds for you but to aid you on your journey. 
+This GPT-powered agent analyzes PoE2 wiki data, popular PoE2 build webpages, current game data, and real-time player data to offer insights and recommendations. This agent is not intended to create builds for you but to aid you on your journey.
 
 ## Planned Features
 
 ### Completed
+
 - [X] **General Game Knowledge Assistance**  
   e.g., "How does Acrobatics work?"
 
@@ -27,6 +28,7 @@ This GPT-powered agent analyzes PoE2 wiki data, popular PoE2 build webpages, cur
   e.g., "What are the meta builds right now?"
 
 ### In Progress / Upcoming
+
 - [ ] **Gear Upgrade Assessment**  
   Upload a screenshot of an item and ask, "Is this an upgrade for me?"
 
@@ -47,38 +49,37 @@ This GPT-powered agent analyzes PoE2 wiki data, popular PoE2 build webpages, cur
 - [ ] PoE 2 API (not yet available) - Trade data, non-authenticated player data
 - [ ] YouTube Transcripts
 
-
 None of the data mentioned above (except for game data) is stored or used for any other purposes. This data is requested by the user and is only accessible during the user's chat interface session.
 
 ## Prerequisites
 
-- [OpenAI API key](https://platform.openai.com/settings/organization/api-keys)
+- [OpenAI API key](https://platform.openai.com/api-keys)
 - [Docker](https://www.docker.com/products/docker-desktop/)
 
 ## Installation
 
 1. Clone the repository
-2. Copy `.env.example` to `.env` and add your OpenAI API key
+
+2. Copy `.env.example` to `.env` and add your [OpenAI API Key](https://platform.openai.com/api-keys)
     ```sh
     cp .env.example .env
     ```
-3. See data/README.md for setting up the database & datalayer.
-4. Create a user - 
-    ```bash 
-    DATABASE_URL=postgresql://root:root@db:5432/postgres python scripts/create_user.py --username {USER} --password {PASSWORD}
+
+3. Install and start up [Docker](https://www.docker.com/products/docker-desktop/)
+
+4. Start the container
+    ```sh
+    docker compose up -d;
     ```
-6. Choose your preferred installation method:
 
-**Using Docker**
-- Install and run [Docker](https://www.docker.com/products/docker-desktop/), then -
-```sh
-docker compose up -d;
-```
-- Navigate to http://localhost:8080/ in your browser
+5. Wait for container to build, then navigate to http://localhost:8080/ in your browser.
+6. By default, the login is:
+   - Email: admin
+   - Password: admin
 
-## Development Instructions
+## Devcontainer Instructions
 
-**[Using Devcontainer in VSCode](https://code.visualstudio.com/docs/devcontainers/tutorial) (slightly advanced, but fastest method)** 
+**[Using Devcontainer in VSCode](https://code.visualstudio.com/docs/devcontainers/tutorial)** 
 - Must have [Docker](https://www.docker.com/products/docker-desktop/) installed. 
 - Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 - Use vscode command -- "Dev Containers: Rebuild Container" 
