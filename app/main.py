@@ -16,7 +16,7 @@ from app.helpers.assistant import get_or_create_assistant
 from app.helpers.events import EventHandler
 from app.helpers.render import render_template
 from app.helpers.users import get_or_create_user
-from app.settings import DATABASE_URL, OPENAI_API_KEY, OPENAI_MODEL
+from app.settings import DATABASE_URL, DEPLOYMENT, OPENAI_API_KEY, OPENAI_MODEL
 from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
 
 # Configure logging
@@ -135,7 +135,8 @@ async def stop_chat():
 async def auth_callback(username: str, password: str):
     # Create an admin user if it doesn't exist
     # TODO: do this somewhere else
-    await get_or_create_user("admin", "admin")
+    if DEPLOYMENT != "web":
+        await get_or_create_user("admin", "admin")
 
     logger.info(f"Authenticating user: {username}")
     user = asyncio.run(ChainlitDataLayer(DATABASE_URL).get_user(username))
