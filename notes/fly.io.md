@@ -1,4 +1,5 @@
 # Fly.io Deployment Notes
+#TODO - this may need updating after installing pgvector
 
 To start and deploy the app - create a new app name in `fly.toml`, then run `fly deploy`.
 
@@ -40,6 +41,9 @@ Then set your secret environment variables -
     ```
 - ```bash
     fly secrets set DATABASE_URL='postgres://postgres:{PASSWORD}@{POSTGRES APP NAME}.flycast:5432/postgres?sslmode=disable'
+    ```
+- ```bash 
+    fly secrets set DEPLOYMENT=web
     ```
 
 Now the app should be good to go with a working datalayer! 
