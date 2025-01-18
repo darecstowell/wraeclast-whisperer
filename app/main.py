@@ -15,6 +15,7 @@ from openai.types.beta.threads.runs import RunStep
 from app.helpers.assistant import get_or_create_assistant
 from app.helpers.events import EventHandler
 from app.helpers.render import render_template
+from app.helpers.users import get_or_create_user
 from app.settings import DATABASE_URL, OPENAI_API_KEY, OPENAI_MODEL
 from app.tools import fetch_sitemap, load_page_content, wiki_page, wiki_search
 
@@ -131,9 +132,12 @@ async def stop_chat():
 
 
 @cl.password_auth_callback
-def auth_callback(username: str, password: str):
+async def auth_callback(username: str, password: str):
+    # Create an admin user if it doesn't exist
+    # TODO: do this somewhere else
+    await get_or_create_user("admin", "admin")
+
     logger.info(f"Authenticating user: {username}")
-    # TODO: probably don't need to re-initalize the data layer every time
     user = asyncio.run(ChainlitDataLayer(DATABASE_URL).get_user(username))
     if not user:
         logger.warning("Authentication failed: user not found")
