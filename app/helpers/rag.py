@@ -8,9 +8,11 @@ from sqlalchemy.orm import sessionmaker
 from pgvector.sqlalchemy import Vector
 import numpy as np
 
+from ..settings import OPENAI_API_KEY
+
 # Constants
 N_DIM = 1536
-openai.api_key = 'your_openai_api_key'
+openai.api_key = OPENAI_API_KEY
 
 # SQLAlchemy setup
 Base = declarative_base()
@@ -60,11 +62,11 @@ def find_similar_embeddings(query_embedding, limit=5):
     k = 5
     similarity_threshold = 0.7
     query = session.query(TextEmbedding, TextEmbedding.embedding.cosine_distance(query_embedding)
-            .label("distance"))
-            .filter(TextEmbedding.embedding.cosine_distance(query_embedding) < similarity_threshold)
-            .order_by("distance")
-            .limit(k)
-            .all()
+        .label("distance"))
+        .filter(TextEmbedding.embedding.cosine_distance(query_embedding) < similarity_threshold)
+        .order_by("distance")
+        .limit(k)
+        .all()
     return query
 
 # if __name__ == "__main__":

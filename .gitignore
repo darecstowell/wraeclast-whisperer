@@ -167,3 +167,6 @@ cython_debug/
 #Chainlit 
 .files
 chainlit-datalayer/
+
+# Data
+data/*
