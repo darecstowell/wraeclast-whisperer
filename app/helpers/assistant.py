@@ -89,7 +89,7 @@ def get_or_create_assistant(sync_client: openai.OpenAI, name: str, model: str, i
         )
         # Return existing assistant if hashes match
         if existing_hash == desired_hash:
-            print(f"Found existing assistant: {name}")
+            print(f"Found existing assistant: {name} {assistant.id}")
             return assistant
 
     print(f"Creating new assistant: {name}")
