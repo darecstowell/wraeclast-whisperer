@@ -82,7 +82,7 @@ None of the data mentioned above (except for game data) is stored or used for an
 **[Using Devcontainer in VSCode](https://code.visualstudio.com/docs/devcontainers/tutorial)** 
 - Must have [Docker](https://www.docker.com/products/docker-desktop/) installed. 
 - Install Extension: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
-- Use vscode command -- "Dev Containers: Rebuild Container" 
+- Use vscode command -- "Dev Containers: Reopen in Container" 
 
 ## Development Notes
 
