@@ -11,7 +11,7 @@ from typing import Any
 
 from pgvector.sqlalchemy import Vector
 from settings import DATABASE_URL, GAME_DATA_VECTOR_DIM
-from sqlalchemy import JSON, Column, Integer, MetaData, Table, Text, create_engine
+from sqlalchemy import JSON, Column, Integer, MetaData, Table, Text, create_engine, text
 
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
@@ -44,6 +44,13 @@ def read_json_file(file_path):
         return json.load(f)
 
 
+def create_vector_extension():
+    """Create pgvector extension if it doesn't exist"""
+    with engine.connect() as conn:
+        conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))
+        conn.commit()
+
+
 def create_or_update_table(table_name, data_array):
     """Create or update table with JSON data array"""
     # Skip if array is empty
@@ -52,6 +59,9 @@ def create_or_update_table(table_name, data_array):
         return
 
     table_name = f"{TABLE_PREFIX}{table_name}"
+
+    # Create vector extension first
+    create_vector_extension()
 
     # Create table with id and searchable_data columns
     table = Table(
@@ -88,8 +98,6 @@ def main():
                 print(f"Processed {json_file.name} - {len(data_array)} rows")
             else:
                 print(f"Skipping {json_file.name} - not an array")
-            # ONLY RUN ONCE FOR TESTING
-            break
         except json.JSONDecodeError:
             print(f"Error: Invalid JSON in {json_file.name}")
         except Exception as e:
