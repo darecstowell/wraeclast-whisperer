@@ -1,5 +1,12 @@
 <div align="center">
 
+### **This project is no longer being developed or maintained.**
+
+<br/>
+<br/>
+<br/>
+
+
 # Wraeclast Whisperer
 
 ![Python Version](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdarecstowell%2Fwraeclast-whisperer%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.tool.poetry.dependencies.python&label=Python)
